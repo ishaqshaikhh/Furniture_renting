@@ -2,6 +2,8 @@ import React from 'react'
 import styles from '../styles/checkout.module.css'
 
 function Checkout() {
+
+
   return (
     <>
       <div className={`containerfluid ${styles.checkout}`}>
@@ -17,7 +19,7 @@ function Checkout() {
                 </div>
                 <div className={styles.details}>
                   <span>Email*</span>
-                  <input type="text" className='input' placeholder=''/>
+                  <input type="text" className='input' placeholder='' />
                 </div>
               </div>
 
@@ -28,31 +30,31 @@ function Checkout() {
                 </div>
                 <div className={styles.details}>
                   <span>Full Name*</span>
-                  <input type="text" className='input' placeholder=''/>
+                  <input type="text" className='input' placeholder='' />
                 </div>
                 <div className={styles.details}>
                   <span>Street Address*</span>
-                  <input type="text" className='input' placeholder=''/>
+                  <input type="text" className='input' placeholder='' />
                 </div>
                 <div className={styles.details}>
                   <div className="row">
                     <div className="col-lg-4">
                       <span>City*</span>
-                      <input type="text" className='input' placeholder=''/>
+                      <input type="text" className='input' placeholder='' />
                     </div>
                     <div className="col-lg-4">
                       <span>State*</span>
-                      <input type="text" className='input' placeholder=''/>
+                      <input type="text" className='input' placeholder='' />
                     </div>
                     <div className="col-lg-4">
                       <span>Zipcode*</span>
-                      <input type="text" className='input' placeholder=''/>
+                      <input type="text" className='input' placeholder='' />
                     </div>
                   </div>
                 </div>
                 <div className={styles.details}>
                   <span>Country</span>
-                  <input type="text" className='input' placeholder=''/>
+                  <input type="text" className='input' placeholder='' />
                 </div>
               </div>
 
@@ -61,16 +63,16 @@ function Checkout() {
                   <h5>Renting Furniture</h5>
                   <b>Required*</b>
                 </div>
-                
+
                 <div className={styles.details}>
                   <div className="row">
                     <div className="col-lg-6">
                       <span>From *</span>
-                      <input type="date" className='input' placeholder=''/>
+                      <input type="date" className='input' placeholder='' />
                     </div>
                     <div className="col-lg-6">
                       <span>to *</span>
-                      <input type="date" className='input' placeholder=''/>
+                      <input type="date" className='input' placeholder='' />
                     </div>
                   </div>
                 </div>
@@ -83,17 +85,17 @@ function Checkout() {
                 </div>
                 <div className={styles.details}>
                   <span>Card Number*</span>
-                  <input type="text" className='input' placeholder=''/>
+                  <input type="text" className='input' placeholder='' />
                 </div>
                 <div className={styles.details}>
                   <div className="row">
                     <div className="col-lg-6">
                       <span>ExpirationDate *</span>
-                      <input type="text" className='input' placeholder=''/>
+                      <input type="text" className='input' placeholder='' />
                     </div>
                     <div className="col-lg-6">
                       <span>SecurityCode *</span>
-                      <input type="text" className='input' placeholder=''/>
+                      <input type="text" className='input' placeholder='' />
                     </div>
                   </div>
                 </div>
@@ -118,7 +120,7 @@ function Checkout() {
                     <p>$399.00</p>
                   </div>
                 </div>
-                
+
               </div>
             </div>
 
@@ -135,13 +137,13 @@ function Checkout() {
                   <h5>Total</h5>
                   <b>350</b>
                 </div>
-               
-                
+
+
               </div>
               <div className="">
-                    <p></p>
-                    <a href="" className="button2">Checkout</a>
-                </div>
+                <p></p>
+                <a href="" className="button2">Checkout</a>
+              </div>
             </div>
           </div>
         </div>

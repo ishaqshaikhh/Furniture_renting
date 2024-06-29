@@ -11,7 +11,7 @@ const ProductCard = () => {
                 <img src="/images/furniture2.png" className='img-fluid' alt="" />
                 <div className="d-flex align-items-center justify-content-between w-100">
                     <div>
-                        <h4>Mad Comfort Chars</h4>
+                        <h4>Mad Comfort Chairs</h4>
                         <span className={styles.price}>&#8377; 300</span>
                     </div>
                     <div className={styles.icon}>

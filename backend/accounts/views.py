@@ -8,7 +8,6 @@ from django.contrib.auth import authenticate
 import requests
 import jwt
 from django.conf import settings
-from mainapp.views import verify_token
 
 
 BASE_URL = "http://127.0.0.1:8000/"
@@ -16,44 +15,62 @@ BASE_URL = "http://127.0.0.1:8000/"
 # TODO: Reset password
 
 
+def verify_token(token):
+    try:
+        if not token:
+            return JsonResponse({"error":"Token is required"})
+        url = BASE_URL + "api/token/verify/"
+        headers = {"Authorization": f"Bearer {token}"}
+        body = {"token":token}
+        result = requests.get(url, headers=headers, data=body)
+        if result.status_code == 200:
+            return {"success":True}
+        else:
+            return {"error":"Token is not valid"}
+    except Exception as e:
+        return {"error":f"Something went wrong {str(e)}"}
+
 # POST - Registers the user with required parameters : Login not required
 @api_view(["POST"])
 def signup(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        email = data.get('email', '')
-        full_name = data.get('full_name', '')
-        password = data.get('password', '')
-        if email == None or full_name == None or password == None:
-            data = {"error":"none fields","message":"Please enter details"}
+    try:
+        if request.method == 'POST':
+            data = json.loads(request.body)
+            email = data.get('email', '')
+            full_name = data.get('full_name', '')
+            password = data.get('password', '')
+            if (email == None or email == '') or (full_name == None or full_name == '') or (password == None or password == ''):
+                data = {"error":"none fields","message":"Please enter details"}
+                return JsonResponse(data)
+            data = {"success": "success"}
+            # Check the User's  phone number or email already exists
+            try:
+                CustomUser.objects.get(email=email)
+                return JsonResponse({'error': 'user already exists', 'message': 'User with this email already exists'}, status=400)
+            except Exception as e:
+                pass
+                # Creating a new user
+                user = CustomUser(email=email)
+                user.full_name = full_name
+                user.set_password(password)
+                user.save()
+                
+                user = authenticate(email=email, password=password)
+                # Checking password
+                if user:
+                    # Logging in user with password
+                    refresh = RefreshToken.for_user(user)
+                    data = {"success": "user created successfully","access": str(refresh.access_token),"refresh": str(refresh)}
+                    return JsonResponse(data)
+                else:
+                    # Authentication failed password is invalid
+                    data = {"error": "authentication failed","message": "Authentication failed"}
+                    return JsonResponse(data)
+        else:
+            data = {"error":"method not allowed","message": "Method not allowed"}
             return JsonResponse(data)
-        data = {"success": "success"}
-        # Check the User's  phone number or email already exists
-        try:
-            CustomUser.objects.get(email=email)
-            return JsonResponse({'error': 'user already exists', 'message': 'User with this email already exists'}, status=400)
-        except Exception as e:
-            pass
-            # Creating a new user
-            user = CustomUser(email=email)
-            user.full_name = full_name
-            user.set_password(password)
-            user.save()
-            
-            user = authenticate(email=email, password=password)
-            # Checking password
-            if user:
-                # Logging in user with password
-                refresh = RefreshToken.for_user(user)
-                data = {"success": "user created successfully","access": str(refresh.access_token),"refresh": str(refresh)}
-                return JsonResponse(data)
-            else:
-                # Authentication failed password is invalid
-                data = {"error": "authentication failed","message": "Authentication failed"}
-                return JsonResponse(data)
-    else:
-        data = {"error":"method not allowed","message": "Method not allowed"}
-        return JsonResponse(data)
+    except Exception as e:
+        return JsonResponse({"error": f"Something went wrong {str(e)}"})
 
 # POST - Logging in user with required parameters : Login not required
 @api_view(["POST"])
@@ -61,9 +78,12 @@ def login(request):
     if request.method == "POST":
         # Getting user data
         data = json.loads(request.body)
-        email = data.get('email')
-        password = data.get('password')
+        email = data.get('email','')
+        password = data.get('password','')
         try:
+            if (email == None or email == '') or (password == None or password == ''):
+                data = {"error":"none fields","message":"Please enter details"}
+                return JsonResponse(data)
             # Searching user with phone number
             user = authenticate(email=email, password=password)
             # Checking password

@@ -1,4 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+import ProductCard from '../components/ProductCard'
+import Products from '../components/Products'
 
 const Home = () => {
 
@@ -19,24 +22,48 @@ const Home = () => {
       </div>
 
       <div className="category">
-        <div className="cat-item">
-          <img src="/images/sofa.jpg" className='img-fluid' alt="" />
+        <Link className="cat-item">
+          <div className="cat-img">
+            <img src="/images/sofa.jpg" className='img-fluid' alt="" />
+          </div>
           <h3>Sofa</h3>
-        </div>
-        <div className="cat-item">
-          <img src="/images/sofa.jpg" className='img-fluid' alt="" />
-          <h3>Sofa</h3>
-        </div>
-        <div className="cat-item">
-          <img src="/images/sofa.jpg" className='img-fluid' alt="" />
-          <h3>Sofa</h3>
-        </div>
-        <div className="cat-item">
-          <img src="/images/sofa.jpg" className='img-fluid' alt="" />
-          <h3>Sofa</h3>
-        </div>
+        </Link>
+        <Link className="cat-item">
+          <div className="cat-img">
+            <img src="/images/tables.jpg" className='img-fluid' alt="" />
+          </div>
+          <h3>Tables</h3>
+        </Link>
+        <Link className="cat-item">
+          <div className="cat-img">
+            <img src="/images/chairs.jpg" className='img-fluid' alt="" />
+          </div>
+          <h3>Chairs</h3>
+        </Link>
+        <Link className="cat-item">
+          <div className="cat-img">
+            <img src="/images/beds.jpg" className='img-fluid' alt="" />
+          </div>
+          <h3>Beds</h3>
+        </Link>
       </div>
 
+      <div className="container-fluid padd-x mb-5 overflow-hidden">
+        <div className="heading">
+          <Link className='button d-md-block d-none'>
+            <span class="text-wrapper" data-text="View All"></span>
+            <div class="fill"></div>
+          </Link>
+          <h2>Elegant Quality & <br /> top notch at every corner</h2>
+        </div>
+        <Products />
+        <div className='mt-4 d-flex align-items-center justify-content-center'>
+          <Link className='button d-md-none d-block'>
+            <span class="text-wrapper" data-text="View All"></span>
+            <div class="fill"></div>
+          </Link>
+        </div>
+      </div>
     </>
   )
 }

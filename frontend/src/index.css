@@ -2,14 +2,20 @@
 
 @font-face {
   font-family: nohem-regular;
-  src: url('./Font/Nohemi-Regular-BF6438cc4d0e493.ttf');
+  src: url('../public/Font/Nohemi-Regular-BF6438cc579d934.woff');
 }
 
+
+:root{
+  --text-color: #000;
+  --bg-color: #fff;
+  --accent1-color: #C26601;
+  --accent2-color: #3F2522;
+}
 
 *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Manrope", sans-serif;
-
 }

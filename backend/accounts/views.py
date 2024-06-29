@@ -49,7 +49,7 @@ def signup(request):
 
 # POST - Logging in user with required parameters : Login not required
 @api_view(["POST"])
-def oldLogin(request):
+def Login(request):
     if request.method == "POST":
         # Getting data
         data = json.loads(request.body)
@@ -93,40 +93,3 @@ def oldLogin(request):
     else:
         data = {"error": "Method not Allowed","message":"Method not Allowed"}
         return JsonResponse(data)
-
-@api_view(["POST"])
-def login(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        mobile = data["mobile"]
-        if not mobile:
-            return JsonResponse({"error": "Mobile is required"})
-        try:
-            user = CustomUser.objects.get(phone_number=mobile)
-        except:
-            user = CustomUser.objects.create(phone_number=mobile)
-            try:
-                ip_address = request.META.get('HTTP_X_FORWARDED_FOR')
-                if ip_address:
-                    ip_address = ip_address.split(',')[0]
-                else:
-                    ip_address = request.META.get('REMOTE_ADDR')
-                response = requests.get(f"http://ip-api.com/json/{ip_address}")
-                data = response.json()
-                if(data["status"] == "success"):
-                    city = data["city"]
-                    state = data["regionName"]
-                    pincode = data["zip"]
-                    new_address = Address(user=user,city=city, state=state, pincode=pincode)
-                    new_address.save()
-            except Exception as e:
-                return JsonResponse({"error": str(e)})
-
-        if user:
-            refresh = RefreshToken.for_user(user)
-            response = {"success": True, "access": str(refresh.access_token)}
-            return JsonResponse(response)            
-    else:
-        return JsonResponse({"error": "Method Not Allowed","message":"Method Not Allowed"})
-
-

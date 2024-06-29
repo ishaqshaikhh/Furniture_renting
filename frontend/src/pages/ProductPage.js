@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import ProductCard from '../components/ProductCard'
 import styles from '../styles/productPage.module.css'
+import toast from 'react-hot-toast';
 
 const ProductPage = () => {
 
     const [category, setCategory] = useState('');
-
     const [filter, setFilter] = useState('');
-
+    const [products, setProducts] = useState('');
+    
     const [drop, setDrop] = useState(Array(3).fill(false));
     
     const handleDrop = (index) => {
@@ -16,6 +17,27 @@ const ProductPage = () => {
         setDrop(newDrop)
     }
 
+
+    const getAllProducts = async () => {
+        try {
+            const response = await fetch(process.env.REACT_APP_API_URL + "/api/getAllProducts", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+
+            const json = await response.json();
+            if (json.success) {
+                console.log(json);
+            } else {
+                toast.error(json.error)
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 
     return (

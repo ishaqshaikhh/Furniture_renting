@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate
 import requests
 import jwt
 from django.conf import settings
-
+from django.core import serializers
 
 BASE_URL = "http://127.0.0.1:8000/"
 # TODO: Forgot password
@@ -173,3 +173,130 @@ def orders(request):
     #we have to make this
     pass
     
+
+# POST - adds a new address : Login Required
+@api_view(["POST"])
+def addAddress(request):
+    if request.method == "POST":
+        # Fetching the addresses
+        token = request.query_params.get('token')
+        if token:
+            try:
+                decoded_token = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=['HS256'])
+                user_id = decoded_token["user_id"]
+                user = CustomUser.objects.get(id=user_id)
+            except Exception as e:
+                data = {"error": "Authentication error"}
+                return JsonResponse(data)
+        address_count = Address.objects.filter(user=user_id).count()
+        # max limit of addresses is 5
+        if address_count >= 5:
+            data = {"error": "You can add upto 5 addresses"}
+            return JsonResponse(data)
+        data = json.loads(request.body)
+        address = data.get("address")
+        city = data.get("city")
+        state = data.get("state")
+        pincode = data.get("pincode")
+        # Creating a new address object
+        if address == None or city == None or state == None or pincode == None:
+            data = {"Error":"Please enter details"}
+            return JsonResponse(data)
+        new_address = Address(user=user, address=address, city=city, state=state, pincode=pincode)
+        # Saving the new address
+        new_address.save()
+        data = {"success": "Addresses added successfully"}
+        return JsonResponse(data)
+    else:
+        # Method Not Allowed
+        data = {"error": "Method Not Allowed"}
+        return JsonResponse(data)
+
+# POST - Updates as Address with a required parameter address_id : Login Required
+@api_view(["POST"])
+def updateAddress(request):
+    if request.method == "POST":
+        try:
+            # Get address object using address_id
+            data = json.loads(request.body)
+            address_id = data.get("address_id")
+            address = Address.objects.get(id=address_id)
+            # Updating address
+            if data.get("address") is not None and data.get("address") != "null":
+                address.address = data.get("address")
+            if data.get("city") is not None and data.get("city") != "null":
+                address.city = data.get("city")
+            if data.get("pincode") is not None and data.get("pincode") != "null":
+                address.pincode = data.get("pincode")
+            if data.get("state") is not None and data.get("state") != "null":
+                address.state = data.get("state")
+            address.save()
+            data = {"success": "address updated successfully"}
+            return JsonResponse(data)
+        except Address.DoesNotExist:
+            # Address Not Found
+            data = {"error": "Address does not exist"}
+            return JsonResponse(data)
+    else:
+        # Method Not Allowed
+        data = {"error": "Method Not Allowed"}
+        return JsonResponse(data)
+    
+# DELETE - Delete Address by id
+@api_view(["DELETE"])
+def deleteAddress(request, id):
+    token = request.query_params.get("token")
+    if token:
+        try:
+            decoded_token = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=["HS256"])
+            user_id = decoded_token["user_id"]
+            try:
+                address = Address.objects.get(id=id)
+                if user_id == address.user.id:
+                    address.delete()
+                    data = {"success":f"Address Delete Successfully"}
+                    return JsonResponse(data)
+                else:
+                    data = {"error":"Authentication Error"}
+                    return JsonResponse(data)
+            except Address.DoesNotExist:
+                data = {"error":"Address does not exist"}
+                return JsonResponse(data)
+        except Exception as e:
+            data = {"error":"Authentication Error"}
+            return JsonResponse(data)
+    else:
+        data = {"error": "Authentication Error"}
+        return JsonResponse(data)
+
+# GET - Returns all addresses - Login Required
+@api_view(["GET"])
+def getAllAddresses(request):
+        token = request.GET.get('token')
+        data = None
+        if token:
+            try:
+                decoded_token = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=['HS256'])
+                token_user_id = decoded_token["user_id"]
+                all_addresses = Address.objects.filter(user=token_user_id)
+                try:
+                    user = CustomUser.objects.get(id=token_user_id)
+                except:
+                    user = None
+
+                if all_addresses.count() > 0:
+                    serialized_obj = serializers.serialize('json',queryset=all_addresses)
+                    data = {"success":serialized_obj}
+                    if user:
+                        data["name"] = user.username
+                        data["email"] = user.email
+                        data["phone_number"] = user.phone_number
+                else:
+                    data = {"empty": "No addresses were found"}
+                return JsonResponse(data)
+            except Exception as e:
+                data = {"error": "Authentication error"}
+                return JsonResponse(data)
+        else:
+            data = {"error":"Authentication Failed"}
+            return JsonResponse(data)

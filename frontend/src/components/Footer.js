@@ -1,14 +1,69 @@
 import React from 'react'
 import styles from '../styles/footer.module.css'
-import { Style } from '@mui/icons-material'
+// import { Style } from '@mui/icons-material'
+import { Link } from 'react-router-dom'
 
 const Footer = () => {
   return (
     <>
-        <footer className={styles.footer}>
-        
-        </footer>
-    </> 
+
+      <div className={`containerfluid ${styles.footer}`}>
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-3 col-md-6 mt-3">
+              <div className={styles.content1}>
+                <div className="logo">
+                  <img src="./images/fav-logo.png" alt="" className='img-fluid' />
+                </div>
+                <p> This convenient and eco-friendly option promotes sustainability by encouraging the reuse of quality furniture.</p>
+
+              </div>
+            </div>
+            <div className="col-lg-3 col-md-6 mt-3">
+              <div className={styles.content2}>
+                <h3>Useful Links</h3>
+                <ul>
+                  <li><i class="fa-solid fa-angles-right"></i>Products</li>
+                  <li><i class="fa-solid fa-angles-right"></i>Consultation</li>
+                  <li><i class="fa-solid fa-angles-right"></i>About Us</li>
+                  <li><i class="fa-solid fa-angles-right"></i>Contact Us</li>
+                </ul>
+              </div>
+            </div>
+            <div className="col-lg-3 col-md-6 mt-3">
+              <div className={styles.content2}>
+                <h3>Our Products</h3>
+                <ul>
+                  <li><i class="fa-solid fa-angles-right"></i>Beds</li>
+                  <li><i class="fa-solid fa-angles-right"></i>Chairs</li>
+                  <li><i class="fa-solid fa-angles-right"></i>Table</li>
+                  <li><i class="fa-solid fa-angles-right"></i>Sofa</li>
+                </ul>
+              </div>
+            </div>
+            <div className="col-lg-3 col-md-6 mt-3">
+              <div className={styles.content4}>
+                <h3>Contact</h3>
+                <div className={styles.icon}>
+                  <i class="fa-solid fa-phone"></i>
+                  <span>+91 99788 XXXXX</span>
+                </div>
+                <hr />
+                <div className={styles.icon}>
+                  <i class="fa-regular fa-envelope"></i>
+                  <span>a2ui@gmail.com</span>
+                </div>
+                <hr />
+                <div className={styles.icon}>
+                  <i class="fa-solid fa-location-dot"></i>
+                  <span>Shahpur,380001</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   )
 }
 

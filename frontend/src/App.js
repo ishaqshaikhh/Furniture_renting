@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import Address from './pages/Address';
 import YourBookings from './pages/YourBookings';
 import Account from './pages/Account';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             </Route>
           </Routes>
         </main>
+        <Footer />
       </Router>
     </>
   );

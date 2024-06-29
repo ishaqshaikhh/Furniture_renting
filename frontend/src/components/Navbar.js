@@ -62,7 +62,7 @@ const Navbar = () => {
         setSearchQuery(event.target.value);
         // Perform search/filtering logic
         const filteredResults = products.filter(product =>
-            product.name.toLowerCase().includes(event.target.value.toLowerCase())
+            product.fields.name.toLowerCase().includes(event.target.value.toLowerCase())
         );
         setSearchResults(filteredResults);
     };

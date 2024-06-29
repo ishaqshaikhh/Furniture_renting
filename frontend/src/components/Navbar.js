@@ -48,7 +48,7 @@ const Navbar = () => {
         if (!token) {
             navigate('/login')
         } else {
-            navigate('/profile')
+            navigate('/account')
         }
     }
 

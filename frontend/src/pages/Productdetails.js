@@ -82,7 +82,7 @@ function Productdetails() {
                                             <BiPlus /></button>
                                     </div>
                                     <Link className='button'>
-                                        <span class="text-wrapper" data-text="Add to Cart"></span>
+                                        <span class="text-wrapper" data-text="Add to Cart" onClick={()=>{handleAddToCart(id)}}></span>
                                         <div class="fill"></div>
                                     </Link>
                                 </div>

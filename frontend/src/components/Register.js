@@ -1,18 +1,19 @@
 import React, { useState } from 'react'
 import styles from '../styles/register.module.css'
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
 
     const [formData, setFormData] = useState({full_Name: '', email: '', password: ''});
     const [error, setError] = useState('');
-    
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
 
-            const response = await fetch(process.env.REACT_APP_API_URL + "api/login/", {
+            const response = await fetch(process.env.REACT_APP_API_URL + "api/signup/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -22,7 +23,9 @@ const Register = () => {
 
             const json = await response.json();
             if (json.success) {
-                console.log("successfully Logged in");
+                localStorage.setItem("token", json.access)
+                navigate('/')
+                console.log("successfully Created");
                 toast.success("successfully Created")
             } else {
                 setError(json.error)

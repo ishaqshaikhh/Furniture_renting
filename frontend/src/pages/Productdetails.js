@@ -29,7 +29,8 @@ function Productdetails() {
                 console.log(json);
                 setData()
             } else {
-                toast.error(json.erro)
+                toast.error(json.error)
+                console.log(json.error);
             }
 
         } catch (error) {

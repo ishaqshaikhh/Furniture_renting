@@ -33,10 +33,10 @@ const Footer = () => {
                             <div className={styles.content2}>
                                 <h3>Our Products</h3>
                                 <ul>
-                                    <li> <Link> <i class="fa-solid fa-angles-right"></i>Beds </Link></li>
-                                    <li> <Link> <i class="fa-solid fa-angles-right"></i>Chairs</Link> </li>
-                                    <li><Link> <i class="fa-solid fa-angles-right"></i>Table </Link></li>
-                                    <li> <Link><i class="fa-solid fa-angles-right"></i>Sofa</Link> </li>
+                                    <li> <Link to="/products"> <i class="fa-solid fa-angles-right"></i>Beds </Link></li>
+                                    <li> <Link to="/products"> <i class="fa-solid fa-angles-right"></i>Chairs</Link> </li>
+                                    <li><Link to="/products"> <i class="fa-solid fa-angles-right"></i>Table </Link></li>
+                                    <li> <Link to="/products"><i class="fa-solid fa-angles-right"></i>Sofa</Link> </li>
                                 </ul>
                             </div>
                         </div>

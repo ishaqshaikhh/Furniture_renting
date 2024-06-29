@@ -7,7 +7,7 @@ import { FaArrowRightLong } from "react-icons/fa6";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import styles from '../styles/productCard.module.css'
 
-const Products = () => {
+const Products = ({ product }) => {
 
     const swiperRef = useRef(null);
 
@@ -65,24 +65,11 @@ const Products = () => {
                 }}
                 className=' position-relative overflow-visible'
             >
-                <SwiperSlide>
-                    <ProductCard />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <ProductCard />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <ProductCard />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <ProductCard />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <ProductCard />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <ProductCard />
-                </SwiperSlide>
+                {product && product.slice(0,10).map((item, index) => {
+                    return <SwiperSlide key={index}>
+                        <ProductCard data={item} />
+                    </SwiperSlide>
+                })}
                 <div className={styles.right} onClick={slideNext}>
                     <FaArrowRightLong />
                 </div>

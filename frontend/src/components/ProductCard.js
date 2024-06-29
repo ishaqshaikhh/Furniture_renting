@@ -7,7 +7,7 @@ const ProductCard = ({data}) => {
     return (
         <>
             <Link className={styles.product}>
-                <img src={`/media/${data.fields.image1}`} className='img-fluid' alt="" />
+                <img src={process.env.REACT_APP_API_URL + `media/${data.fields.image1}`} className='img-fluid' alt="" />
                 <div className="d-flex align-items-center justify-content-between w-100">
                     <div>
                         <h4>{data.fields.name}</h4>

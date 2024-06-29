@@ -1,13 +1,23 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
 import Products from '../components/Products'
 import toast, { Toaster } from 'react-hot-toast';
+import StateContext from '../context/state/StateContext';
+import FetchContext from '../context/Fetch/FetchContext';
 
 
 const Home = () => {
 
+  const { products } = useContext(StateContext)
+  const { getAllProducts } = useContext(FetchContext)
 
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+    if (token) {
+      getAllProducts();
+    }
+  }, [])
 
   return (
     <>
@@ -56,9 +66,9 @@ const Home = () => {
           </Link>
           <h2>Elegant Quality & <br /> top notch at every corner</h2>
         </div>
-        <Products />
+        <Products product={products} />
         <div className='mt-4 d-flex align-items-center justify-content-center'>
-          <Link className='button d-md-none d-block'>
+          <Link to="/products" className='button d-md-none d-block'>
             <span class="text-wrapper" data-text="View All"></span>
             <div class="fill"></div>
           </Link>

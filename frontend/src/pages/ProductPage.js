@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ProductCard from '../components/ProductCard'
 import styles from '../styles/productPage.module.css'
 import toast from 'react-hot-toast';
+import FetchContext from '../context/Fetch/FetchContext';
+import StateContext from '../context/state/StateContext';
 
 const ProductPage = () => {
 
     const [category, setCategory] = useState('');
     const [filter, setFilter] = useState('');
-    const [products, setProducts] = useState('');
-
+    const { products } = useContext(StateContext)
+    const { getAllProducts } = useContext(FetchContext)
     const [drop, setDrop] = useState(Array(3).fill(false));
 
     const handleDrop = (index) => {
@@ -18,31 +20,12 @@ const ProductPage = () => {
     }
 
 
-    const getAllProducts = async () => {
-        try {
-            const response = await fetch(process.env.REACT_APP_API_URL + "/api/getAllProducts", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            })
-
-            const json = await response.json();
-            const products = JSON.parse(json.context.products)
-            if (json.success) {
-                console.log(products);
-                setProducts(products)
-            } else {
-                toast.error(json.error)
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     useEffect(() => {
-        getAllProducts();
+        const token = localStorage.getItem("token")
+        if (token) {
+            getAllProducts();
+        }
     }, [])
 
     return (
@@ -111,8 +94,8 @@ const ProductPage = () => {
                 <div className="row">
 
                     {products && products.map((item, index) => {
-                        return <div key={index} className="col-lg-3 col-md-4 col-sm-6 col-12">
-                            <ProductCard  data={item} />
+                        return <div key={index} className="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
+                            <ProductCard data={item} />
                         </div>
                     })}
 

@@ -19,12 +19,22 @@
  .content2 ul{
     padding-left: 0px;
  }
+
+a{
+    color: var(--text-color) !important;
+}
+
  .content2 li{
      color: var(--text-color);
      font-size: 1.2vw;
      cursor: pointer;
      /* padding: 8px; */
  }
+
+ .content2 li a{
+    color: var(--text-color) !important;
+ }
+
  .content2 i{
      color: var(--text-color);
      padding: 15px 15px 14px 0px;

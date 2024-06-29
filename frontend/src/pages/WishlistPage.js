@@ -28,7 +28,7 @@ const WishlistPage = () => {
     };
 
     return (
-        <div>
+        <div className='padd-x' style={{height: "100vh",marginTop: "100px"}}>
             <h1>Wishlist</h1>
             {wishlistItems.length === 0 ? (
                 <p>Your wishlist is empty.</p>

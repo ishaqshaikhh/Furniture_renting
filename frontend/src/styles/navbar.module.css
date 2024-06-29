@@ -99,6 +99,7 @@
 
 a{
     text-decoration: none !important;
+    color: var(--text-color) !important;
 }
 
 .search.active .search_cont{

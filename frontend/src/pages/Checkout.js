@@ -140,15 +140,15 @@ function Checkout() {
                 <div className={styles.order}>
                   <div className={styles.data}>
                     <div className={styles.item}>
-                      <img src="../images/sofa.jpg" alt="" />
+                      <img src={process.env.REACT_APP_API_URL + `media/product_images/bed1.png`} alt="" />
                     </div>
                     <div className={styles.quntity}>
-                      <p>Sofa</p>
+                      <p>Beds1</p>
                       <p>Quantity : 1</p>
                     </div>
                   </div>
                   <div className={styles.amount}>
-                    <p>$399.00</p>
+                    <p>$1000.00</p>
                   </div>
                 </div>
 

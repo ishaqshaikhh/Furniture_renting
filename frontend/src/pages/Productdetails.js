@@ -45,6 +45,10 @@ function Productdetails() {
         getProduct();
     })
 
+    const handleAddToCart = () => {
+        
+    }
+
     return (
         <>
             <div className={`containerfluid ${styles.details}`}>

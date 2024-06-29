@@ -31,13 +31,13 @@ const Cart = (props) => {
                     <div className={`${styles.cartList} mt-2`}>
                         <div className={`${styles.cartItem} mb-3`}>
                             <div className="d-flex justify-content-center align-items-center">
-                                <img src="/images/furniture2.png" alt="furniture-char" className="img-fluid" />
+                                <img src={process.env.REACT_APP_API_URL + `media/product_images/bed1.png`} alt="furniture-char" className="img-fluid" />
                                 <div className={`${styles.itemInfo} d-flex flex-column justify-content-around`}>
-                                    <h6>Ajmeri Oudh - 25gm</h6>
+                                    <h6>Bed1</h6>
                                     <div className="qty-container" style={{width: "fit-content"}}>
                                         <button className="qty-btn-minus btn-light" type="button">
                                             <BiMinus /></button>
-                                        <input type="text" name="qty" value="0" className="input-qty" />
+                                        <input type="text" name="qty" value="1" className="input-qty" />
                                         <button className="qty-btn-plus btn-light" type="button">
                                             <BiPlus /></button>
                                     </div>
@@ -45,14 +45,14 @@ const Cart = (props) => {
                             </div>
                             <div className="d-flex justify-content-end flex-column align-items-end h-100 ">
                                 <BiX className={styles.close} />
-                                <span className="mt-4">&#8377;69.00</span>
+                                <span className="mt-4">&#8377;1000.00</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="">
                     <p></p>
-                    <a href="" className="button2">Checkout - &#8377;138.00</a>
+                    <a href="/checkout" className="button2">Checkout - &#8377;1000.00</a>
                 </div>
             </div>
         ): <>

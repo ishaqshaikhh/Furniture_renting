@@ -1,0 +1,47 @@
+.details{
+    padding-top: 100px;
+}
+.prodimg{
+    width: 100%;
+    height: auto;
+}
+.prodimg img{
+    width: 100%;
+    height: auto;
+}
+
+.content{
+    padding: 50px;
+    
+}
+.prodtitle{
+    font-size: 2.8vw;
+    font-weight: 600;
+    font-family: nohem-light;
+}
+.price{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    /* margin-top: 20px; */
+    font-size: 1.8vw;
+    font-family: nohem-light;
+}
+.price p{
+    margin-bottom: 0px;
+}
+.price .original{
+    font-size: 1.4vw;
+   text-decoration: line-through;
+   margin-right: 15px;
+}
+.stock p{
+    font-size: 1.2vw;
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+}
+.desc{
+    margin-top: 15px;
+    font-size: 1.2vw;
+    line-height: 1.5rem;
+}

@@ -159,6 +159,7 @@ def addToWishlist(request,product_id):
     wishlist , created = Wishlist.objects.get_or_create(user=request.user,product=product)
 
     return JsonResponse({'product':product})
+
 @api_view(["GET"])
 def getAllCarts(request):
     try:
@@ -184,10 +185,10 @@ def getAllCarts(request):
             cart_items = {}
             for c in carts:
                 temp_amount = float(c.product.discounted_price) * int(c.quantity)
-                cart_items[c]["sub_total"] = temp_amount
+                cart_items[c] = c
                 amount += temp_amount
             total_amount = "%.2f" % float(amount)
-            data = {"success": True, "cart_length":cart_count, "carts":cart_items, "total_amount":total_amount}
+            data = {"success": True, "cart_length":cart_count, "carts":serializers.serialize(format="json",queryset=cart_items), "total_amount":total_amount}
             return JsonResponse(data)
         else:
             return JsonResponse({"error":"Token is invalid"})
@@ -195,89 +196,137 @@ def getAllCarts(request):
     except Exception as e:
         return JsonResponse({"error":f"Something went wrong {str(e)}"})
 
+@api_view(["GET"])
 def plus_cart(request):
-    if request.method == "GET" and request.user.is_authenticated:
-        prod_id = request.GET['prod_id']
-        c = Cart.objects.get(Q(product=prod_id) & Q(user=request.user))
-        c.quantity += 1
-        c.save()
-        amount = 0.0
-        temp_amount = 0.0
-        cart_product = [p for p in Cart.objects.all() if p.user == request.user]
-        for p in cart_product:
-            temp_amount = ("%.2f" % (float(p.quantity) * float(p.product.discounted_price)))
-
-            amount += float(temp_amount)
-
-        totalamount = round(amount)
-        amount = round(float(float(c.product.discounted_price) * int(c.quantity)))
-        data = {
-                'quantity':c.quantity,
-                'price':c.product.discounted_price,
-                'amount': amount,
-                'totalamount' : totalamount,
-                'success':'success'
-        }
-        return JsonResponse(data, safe=False)
-    else:
-        data = {
-            'error':'auth_error'
-        }
-        return JsonResponse(data, safe=False)
-
-
-def minus_cart(request):
-    if request.method == "GET" and request.user.is_authenticated:
-        prod_id = request.GET['prod_id']
-        c = Cart.objects.get(Q(product=prod_id) & Q(user=request.user))
-        if (c.quantity > 1):
-            c.quantity -= 1
-        c.save()
-        amount = 0.0
-        temp_amount = 0.0
-        cart_product = [p for p in Cart.objects.all() if p.user == request.user]
-        for p in cart_product:
-            temp_amount = (float(p.quantity) * float(p.product.discounted_price))
-            amount += float(temp_amount)
-        totalamount = round(amount)
-        amount = round(float(float(c.product.discounted_price) * int(c.quantity)))
-        data = {
-                'quantity':c.quantity,
-                'amount': amount,
-                'price':c.product.discounted_price,
-                'totalamount' : totalamount,
-                'success': 'success'
-        }
-        return JsonResponse(data, safe=False)
-    else:
-        data = {
-            'error':'auth_error'
-        }
-        return JsonResponse(data, safe=False)
-
-
-def remove_cart(request):
-    if request.method == "GET" and request.user.is_authenticated:
-        user = request.user
-        prod_id = request.GET['prod_id']
-        c = Cart.objects.get(Q(product=prod_id) & Q(user=user))
-        c.delete()
-        amount = 0.0
-        cart_product = [p for p in Cart.objects.all() if p.user == user]
-        cart_items = len(cart_product)
-        for p in cart_product:
-            temp_amount = (float(p.quantity) * float(p.product.discounted_price))
-            amount += temp_amount
-        total_amount = round(amount)
-        data = {
-            'amount' : amount,
-            'totalamount': total_amount,
-            'cart_items':cart_items,
-            'success':'success'
-        }
-        return JsonResponse(data)
-    else:
-        data = {
-                    'error':'auth_error'
+    try:
+        if request.method == "GET":
+            token = request.GET.get("token")
+            if not token:
+                return JsonResponse({"error": "Invalid token"})
+            result = verify_token(token)
+            if "error" in result and result["error"]:
+                return JsonResponse({"error": result["error"]})
+            
+            if "success" in result and result["success"] == True:
+                decoded_token = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=["HS256"])
+                user_id = decoded_token["user_id"]
+                try:
+                    user = CustomUser.objects.get(id=user_id)
+                except:
+                    user = None
+                    return JsonResponse({"error":"User does not exist"})
+                prod_id = request.GET['prod_id']
+                c = Cart.objects.get(Q(product=prod_id) & Q(user=user))
+                c.quantity += 1
+                c.save()
+                amount = 0.0
+                temp_amount = 0.0
+                cart_product = [p for p in Cart.objects.all() if p.user == user]
+                for p in cart_product:
+                    temp_amount = ("%.2f" % (float(p.quantity) * float(p.product.discounted_price)))
+                    amount += float(temp_amount)
+                totalamount = round(amount)
+                amount = round(float(float(c.product.discounted_price) * int(c.quantity)))
+                data = {
+                        'quantity':c.quantity,
+                        'price':c.product.discounted_price,
+                        'amount': amount,
+                        'totalamount' : totalamount,
+                        'success':True
                 }
-        return JsonResponse(data, safe=False)
+                return JsonResponse(data, safe=False)
+            else:
+                data = {'error':'Authentication Failed'}
+                return JsonResponse(data)
+    except Exception as e:
+        return JsonResponse({"error":f"Something went wrong {str(e)}"})
+
+@api_view(["GET"])
+def minus_cart(request):
+    try:
+        if request.method == "GET":
+            token = request.GET.get("token")
+            if not token:
+                return JsonResponse({"error": "Invalid token"})
+            result = verify_token(token)
+            if "error" in result and result["error"]:
+                return JsonResponse({"error": result["error"]})
+            
+            if "success" in result and result["success"] == True:
+                decoded_token = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=["HS256"])
+                user_id = decoded_token["user_id"]
+                try:
+                    user = CustomUser.objects.get(id=user_id)
+                except:
+                    user = None
+                    return JsonResponse({"error":"User does not exist"})
+                prod_id = request.GET['prod_id']
+                c = Cart.objects.get(Q(product=prod_id) & Q(user=user))
+                if (c.quantity > 1):
+                    c.quantity -= 1
+                c.save()
+                amount = 0.0
+                temp_amount = 0.0
+                cart_product = [p for p in Cart.objects.all() if p.user == user]
+                for p in cart_product:
+                    temp_amount = (float(p.quantity) * float(p.product.discounted_price))
+                    amount += float(temp_amount)
+                totalamount = round(amount)
+                amount = round(float(float(c.product.discounted_price) * int(c.quantity)))
+                data = {
+                        'quantity':c.quantity,
+                        'amount': amount,
+                        'price':c.product.discounted_price,
+                        'totalamount' : totalamount,
+                        'success': True
+                }
+                return JsonResponse(data, safe=False)
+            else:
+                data = {'error':'Authentication Failed'}
+                return JsonResponse(data, safe=False)    
+    except Exception as e:
+        return JsonResponse({"error":f"Something went wrong {str(e)}"})
+
+@api_view(["GET"])
+def remove_cart(request):
+    try:
+        if request.method == "GET":
+            token = request.GET.get("token")
+            if not token:
+                return JsonResponse({"error": "Invalid token"})
+            result = verify_token(token)
+            if "error" in result and result["error"]:
+                return JsonResponse({"error": result["error"]})
+            
+            if "success" in result and result["success"] == True:
+                decoded_token = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=["HS256"])
+                user_id = decoded_token["user_id"]
+                try:
+                    user = CustomUser.objects.get(id=user_id)
+                except:
+                    user = None
+                    return JsonResponse({"error":"User does not exist"})
+                prod_id = request.GET['prod_id']
+                c = Cart.objects.get(Q(product=prod_id) & Q(user=user))
+                c.delete()
+                amount = 0.0
+                cart_product = [p for p in Cart.objects.all() if p.user == user]
+                cart_items = len(cart_product)
+                for p in cart_product:
+                    temp_amount = (float(p.quantity) * float(p.product.discounted_price))
+                    amount += temp_amount
+                total_amount = round(amount)
+                data = {
+                    'amount' : amount,
+                    'totalamount': total_amount,
+                    'cart_items':cart_items,
+                    'success':'success'
+                }
+                return JsonResponse(data)
+            else:
+                data = {'error':'Authentication Failed'}
+            return JsonResponse(data, safe=False)
+    except Exception as e:
+        return JsonResponse({"error":f"Something went wrong"})
+
+

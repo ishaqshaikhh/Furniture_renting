@@ -8,7 +8,7 @@ function Checkout() {
         <div className="container">
           <h3>Checkout</h3>
           <div className="row">
-            <div className="col-8">
+            <div className="col-lg-8 col-md-6">
 
               <div className={styles.customer}>
                 <div className={styles.head}>
@@ -58,6 +58,26 @@ function Checkout() {
 
               <div className={styles.customer}>
                 <div className={styles.head}>
+                  <h5>Renting Furniture</h5>
+                  <b>Required*</b>
+                </div>
+                
+                <div className={styles.details}>
+                  <div className="row">
+                    <div className="col-lg-6">
+                      <span>From *</span>
+                      <input type="date" className='input' placeholder=''/>
+                    </div>
+                    <div className="col-lg-6">
+                      <span>to *</span>
+                      <input type="date" className='input' placeholder=''/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.customer}>
+                <div className={styles.head}>
                   <h5>Payment Info</h5>
                   <b>Required*</b>
                 </div>
@@ -78,19 +98,50 @@ function Checkout() {
                   </div>
                 </div>
               </div>
+
+              <div className={styles.customer}>
+                <div className={styles.head}>
+                  <h5>Item In Order</h5>
+                  <b>Required*</b>
+                </div>
+                <div className={styles.order}>
+                  <div className={styles.data}>
+                    <div className={styles.item}>
+                      <img src="../images/sofa.jpg" alt="" />
+                    </div>
+                    <div className={styles.quntity}>
+                      <p>Sofa</p>
+                      <p>Quantity : 1</p>
+                    </div>
+                  </div>
+                  <div className={styles.amount}>
+                    <p>$399.00</p>
+                  </div>
+                </div>
+                
+              </div>
             </div>
 
-            <div className="col-4">
+            <div className="col-lg-4 col-md-6">
               <div className={styles.customer}>
                 <div className={styles.head}>
                   <h5>Order Summary</h5>
                 </div>
-                <div className={styles.details}>
-                  <p>Subtotal</p>
-                  <p>Total</p>
+                <div className={styles.total}>
+                  <h5>Subtotal</h5>
+                  <b>300</b>
                 </div>
+                <div className={styles.total}>
+                  <h5>Total</h5>
+                  <b>350</b>
+                </div>
+               
+                
               </div>
-              
+              <div className="">
+                    <p></p>
+                    <a href="" className="button2">Checkout</a>
+                </div>
             </div>
           </div>
         </div>

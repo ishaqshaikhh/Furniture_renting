@@ -182,12 +182,39 @@ def order(request):
     except Exception as e:
         return JsonResponse({"error":f"something went wrong : {str(e)}"})
 
-api_view(['GET'])   
-def addToWishlist(request,product_id):
-    product  = get_object_or_404(Product,pk=product_id)
-    wishlist , created = Wishlist.objects.get_or_create(user=request.user,product=product)
+@api_view(['POST'])
+def add_to_wishlist(request, product_id):
+    user = request.user
+    product = Product.objects.get(id=product_id)
+    
+    try:
+        wishlist_item = Wishlist.objects.create(user=user, product=product)
+        return JsonResponse({'message': 'Product added to wishlist successfully'})
+    except Exception as e:
+        return JsonResponse({'error': str(e)})
 
-    return JsonResponse({'product':product})
+
+@api_view(['GET'])
+def view_wishlist(request):
+    user = request.user  # Assuming user is authenticated
+    
+    wishlist_items = Wishlist.objects.filter(user=user)
+    serializer = WishlistSerializer(wishlist_items, many=True)
+    
+    return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['DELETE'])
+def remove_from_wishlist(request, product_id):
+    user = request.user  # Assuming user is authenticated
+    
+    try:
+        wishlist_item = Wishlist.objects.get(user=user, product_id=product_id)
+    except Wishlist.DoesNotExist:
+        return JsonResponse({"error": "Item not found in wishlist"}, status=status.HTTP_404_NOT_FOUND)
+    
+    wishlist_item.delete()
+    return JsonResponse({"success": "Item removed from wishlist"}, status=status.HTTP_204_NO_CONTENT)
+
 
 @api_view(["GET"])
 def getAllCarts(request):

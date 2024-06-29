@@ -6,6 +6,13 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from .models import CustomUser, Address
 from django.contrib.auth import authenticate
 import requests
+import jwt
+from django.conf import settings
+
+
+BASE_URL = "http://127.0.0.1:8000/"
+# TODO: Forgot password
+# TODO: Reset password
 
 
 # POST - Registers the user with required parameters : Login not required
@@ -49,7 +56,7 @@ def signup(request):
 
 # POST - Logging in user with required parameters : Login not required
 @api_view(["POST"])
-def Login(request):
+def login(request):
     if request.method == "POST":
         # Getting user data
         data = json.loads(request.body)
@@ -97,11 +104,29 @@ def Login(request):
 @api_view(["GET"])
 def get_user(request):
     try:
-        get_data = CustomUser.objects.get()
+        token = request.GET.get('token')
+        if not token:
+            return JsonResponse({"error": "token not found"})
+        url = BASE_URL + "api/token/verify/"
+        headers = {"Authorization": f"Bearer {token}"}
+        body = {"token":token}
+        result = requests.get(url, headers=headers, data=body)
+        if result.status_code == 200:
+            decoded_token = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=["HS256"])
+            user_id = decoded_token["user_id"]
+            try:
+                user = CustomUser.objects.get(id=user_id)
+            except:
+                user = None
+            if user is not None:
+                data = {"email": user.email, "name": user.full_name}
+                return JsonResponse(data)
+            else:
+                return JsonResponse({"error": "User not found"})
+        else:
+            return JsonResponse({"error": "Authentication failed"})
     except Exception as e:
-        print("Error",e)
-    
-    return JsonResponse(get_data)
+        return JsonResponse({"error": f"Something went wrong {str(e)}"})
 
 @api_view(["GET"])
 def profile(request):
@@ -126,3 +151,4 @@ def products(request):
 def orders(request):
     #we have to make this
     pass
+    

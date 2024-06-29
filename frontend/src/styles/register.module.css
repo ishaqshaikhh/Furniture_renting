@@ -1,0 +1,77 @@
+.title h1{
+    font-size: 5vw;
+    text-align: center;
+    padding: 20px 0px;
+    font-weight: 500;
+    color: var(--accent1-color);
+    font-family: nohem-regular;
+}
+.forms{
+    width: 100%;
+    padding: 1vw 14vw;
+}
+.forms .input_field2{
+    padding: 10px;
+}
+.forms .input_field2 span{
+    font-size: 1.2vw;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    color: var(--accent1-color);
+    font-family: nohem-regular;
+
+}
+.forms .input_field2 input{
+    padding: 5px 10px;
+    border: none;
+    outline: none;
+    width: 100%;
+    border-bottom: 1px solid var(--accent2-color);
+}
+
+.formcheck{
+    padding: 20px 10px;
+    display: flex;
+}
+
+.formcheckinput{
+    height: 25px;
+    width: 25px;
+    border-radius: 50% !important;
+}
+.button1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.button1 button{
+    outline: none;
+    height: 50px;
+    width: 200px;
+    border-radius: 20px;
+    color: var(--accent2-color);
+}
+.register p{
+    padding: 10px 10px;
+    font-size: 1.2vw;
+}
+
+@media(max-width:999px){
+    .title h1{
+        font-size: 3.2rem;
+    }
+    .forms{
+        width: 100%;
+        padding: 1vw 4vw;
+    }
+    .forms .input_field2{
+        padding: 10px;
+    }
+    .forms .input_field2 span{
+        font-size: 1rem;
+    }
+    .register p{
+        padding: 10px 10px;
+        font-size: 1.2rem;
+    }
+}

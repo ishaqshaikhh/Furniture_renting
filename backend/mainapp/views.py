@@ -10,7 +10,7 @@ from django.conf import settings
 from accounts.views import BASE_URL
 import jwt
 from django.core import serializers
-
+from datetime import datetime
 
 
 # Create your views here.
@@ -44,6 +44,8 @@ def getAllProducts(request):
     context["products"] = products
     response = {"success": True, "context": context}
     return JsonResponse(response)
+
+
 
 def verify_token(token):
     try:
@@ -126,30 +128,45 @@ def order(request):
         if "error" in result and result["error"]:
             return JsonResponse({"error": result["error"]})
         
-        decoded_token = jwt.decode(token,settings.JWT_SECRET_KEY,algorithms="HS256")
-        user_id = decoded_token["user_id"]
+        if "success" in result and result["success"] == True:        
+            decoded_token = jwt.decode(token,settings.JWT_SECRET_KEY,algorithms="HS256")
+            user_id = decoded_token["user_id"]
+            user = CustomUser.objects.get(user_id=user_id)
+            carts = Cart.objects.filter(user=user)
+            if len(carts) == 0:
+                return JsonResponse({"error":"Cart is empty"})
+            data = json.loads(request.body)
+            order = Order()
+            order.customer_name = data.get("customer_name")
+            order.email = data.get("email")
+            order.phone = data.get("phone")
+            order.adddress = data.get("address")
+            order.city = data.get("city")
+            order.state = data.get("state")
+            order.pincode = data.get("pincode")
+            amount = 0.0
+            for cart in carts:
+                order.products.add(cart.product, through_defaults={"quantity":cart.quantity})
+                amount += round(float((cart.product.discounted_price) * int(cart.quantity)))
 
-        user = CustomUser.objects.get(user_id=user_id)
-        carts = Cart.objects.fliter(user=user)
-
-        if not carts.exists():
-            return JsonResponse({"error":"Cart is empty"})
-        
-        total_amount = 0.0
-        for cart_item in carts:
-            total_amount += cart_item.quantity * cart_item.product.discounted_price
-
-        
-        for cart_item in carts:
-            order_item = OrderItem.objects.create(
-                order = order,
-                product = cart_item.product,
-                quantity = cart_item.quantity
-            )
-
-            carts.delete()
-        return JsonResponse({"success": True,"message": "Order Placed Successfully"})
-
+            order.sub_total = amount
+            gst = round(float(amount) * 0.18)
+            order.gst = gst
+            order.total_amount = round(float(amount) + float(gst))
+            start_date = data.get("start_date")
+            date_compos = str(start_date).split("-")
+            start_date = datetime(int(date_compos[0]),int(date_compos[1]),int(date_compos[2])).strftime("%Y-%m-%d")
+            order.start_date = start_date
+            end_date = data.get("end_date")
+            date_compos = str(end_date).split("-")
+            end_date = datetime(int(date_compos[0]),int(date_compos[1]),int(date_compos[2])).strftime("%Y-%m-%d")
+            order.end_date = end_date
+            order.shipping_charges = 0
+            order.save()
+            order.order_number = "FRTL" + str(datetime.now().date()) + str(datetime.now().month) + str(datetime.now().day) + str(order.id)
+            return JsonResponse({"success":"Order placed successfully","order":serializers.serialize(format="json",queryset=order)})
+        else:
+            return JsonResponse({"error": "Authentication Failed"})
     except Exception as e:
         return JsonResponse({"error":f"something went wrong : {str(e)}"})
 
@@ -328,5 +345,7 @@ def remove_cart(request):
             return JsonResponse(data, safe=False)
     except Exception as e:
         return JsonResponse({"error":f"Something went wrong"})
+    
+
 
 

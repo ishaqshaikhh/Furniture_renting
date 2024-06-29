@@ -48,7 +48,7 @@ def getAllProducts(request):
 @api_view(["GET"])
 def getProduct(request):
     try:
-        prod_id = reqeust.GET.get("product_id")
+        prod_id = request.GET.get("product_id")
         try:
             product = Product.objects.get(id=prod_id)
         except Product.DoesNotExist:

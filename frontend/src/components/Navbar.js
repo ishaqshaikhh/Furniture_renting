@@ -100,7 +100,7 @@ const Navbar = () => {
                             </div>
                         )}
                     </div>
-                    <FiHeart style={{ cursor: "pointer" }} />
+                    <FiHeart style={{ cursor: "pointer" }} onClick={() => navigate('/wishlist')} />
                     <BiUser style={{ cursor: "pointer" }} onClick={() => { sendProfile() }} />
                     <BiShoppingBag style={{ cursor: "pointer" }} onClick={() => { setCartOpen(true) }} />
                 </div>

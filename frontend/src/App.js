@@ -14,8 +14,16 @@ import YourBookings from './pages/YourBookings';
 import Account from './pages/Account';
 import Footer from './components/Footer';
 import Contact from './pages/Contact';
+import WishlistPage from './pages/WishlistPage';
+import { useEffect } from 'react';
 
 function App() {
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+
   return (
     <>
       <Router>
@@ -32,6 +40,7 @@ function App() {
             <Route exact path='/Contact' element={<Contact />}></Route>
             <Route exact path='/productdetails/:id' element={<Productdetails />}></Route>
             <Route exact path='/checkout' element={<Checkout />}></Route>
+            <Route exact path='/wishlist' element={<WishlistPage />}></Route>
             <Route exact path='/account' element={<Account />}>
               <Route exact path='/account/profile' element={<Profile />} />
               <Route exact path='/account/address' element={<Address />} />

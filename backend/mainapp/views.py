@@ -45,6 +45,18 @@ def getAllProducts(request):
     response = {"success": True, "context": context}
     return JsonResponse(response)
 
+@api_view(["GET"])
+def getProduct(request):
+    try:
+        prod_id = reqeust.GET.get("product_id")
+        try:
+            product = Product.objects.get(id=prod_id)
+        except Product.DoesNotExist:
+            return JsonResponse({"error":"Product not found"})
+        return JsonResponse({"success": True, "product": serializers.serialize(format="json",queryset=[product])})
+    except Exception as e:
+        return JsonResponse({"error":f"Something went wrong {str(e)}"})
+
 
 
 def verify_token(token):

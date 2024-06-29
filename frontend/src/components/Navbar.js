@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import styles from '../styles/navbar.module.css'
 import { Link, useNavigate } from 'react-router-dom'
 import { FiSearch, FiHeart } from "react-icons/fi";
@@ -6,10 +6,14 @@ import { BiShoppingBag, BiUser, BiX } from "react-icons/bi";
 import { RiMenu2Line } from "react-icons/ri";
 
 import Cart from './Cart';
+import FetchContext from '../context/Fetch/FetchContext';
+import StateContext from '../context/state/StateContext';
 
 
 const Navbar = () => {
 
+    const { products } = useContext(StateContext)
+    const { getAllProducts } = useContext(FetchContext); 
     const [cartOpen, setCartOpen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
@@ -48,6 +52,10 @@ const Navbar = () => {
         }
     }
 
+    useEffect(() => {
+        getAllProducts()
+    }, [])
+
     return (
         <>
             <nav className={styles.navbar}>
@@ -67,6 +75,12 @@ const Navbar = () => {
                     <div ref={searchRef} className={`${styles.search} ${searchOpen ? styles.active : null}`}>
                         <input type="text" placeholder='Search ...' />
                         <FiSearch style={{ cursor: "pointer" }} onClick={() => {setSearchOpen(!searchOpen)}} />
+                        <div className={styles.search_cont}>
+                            <div className={styles.search_card}>
+                                <img src="/images/furniture2.png" className='img-fluid' alt="" />
+                                <h4>Price</h4>
+                            </div>
+                        </div>
                     </div>
                     <FiHeart style={{ cursor: "pointer" }} />
                     <BiUser style={{ cursor: "pointer" }} onClick={() => { sendProfile() }} />

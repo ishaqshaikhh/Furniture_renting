@@ -2,6 +2,8 @@ import React from 'react'
 import styles from '../styles/checkout.module.css'
 
 function Checkout() {
+
+
   return (
     <>
       <div className={`containerfluid ${styles.checkout}`}>

@@ -1,16 +1,18 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ProductCard from '../components/ProductCard'
 import styles from '../styles/productPage.module.css'
 import toast from 'react-hot-toast';
+import FetchContext from '../context/Fetch/FetchContext';
+import StateContext from '../context/state/StateContext';
 
 const ProductPage = () => {
 
     const [category, setCategory] = useState('');
     const [filter, setFilter] = useState('');
-    const [products, setProducts] = useState('');
-    
+    const { products } = useContext(StateContext)
+    const { getAllProducts } = useContext(FetchContext)
     const [drop, setDrop] = useState(Array(3).fill(false));
-    
+
     const handleDrop = (index) => {
         const newDrop = [...drop]
         newDrop[index] = !newDrop[index]
@@ -18,33 +20,16 @@ const ProductPage = () => {
     }
 
 
-    const getAllProducts = async () => {
-        try {
-            const response = await fetch(process.env.REACT_APP_API_URL + "/api/getAllProducts", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            })
 
-            const json = await response.json();
-            if (json.success) {
-                console.log(json);
-            } else {
-                toast.error(json.error)
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
+    useEffect(() => {
+        getAllProducts();
+    }, [])
 
     return (
         <>
             <div className={`${styles.page} container-fluid padd-x`}>
                 <div className="d-flex justify-content-end align-items-center">
-                    <div class="dropdown" onClick={() => {handleDrop(0)}}>
+                    <div class="dropdown" onClick={() => { handleDrop(0) }}>
                         <input type="checkbox" class="dropdown__switch drop1" id="filter-switch" hidden />
                         <label for="filter-switch" class={`dropdown__options-filter ${drop[0] ? 'active' : ''}`}>
                             <ul class="dropdown__filter" role="listbox" tabindex="-1">
@@ -73,7 +58,7 @@ const ProductPage = () => {
                             </ul>
                         </label>
                     </div>
-                    <div class="dropdown" onClick={() => {handleDrop(1)}}>
+                    <div class="dropdown" onClick={() => { handleDrop(1) }}>
                         <input type="checkbox" class="dropdown__switch drop2" id="filter-switch" hidden />
                         <label for="filter-switch" class={`dropdown__options-filter ${drop[1] ? 'active' : ''}`}>
                             <ul class="dropdown__filter" role="listbox" tabindex="-1">
@@ -104,9 +89,13 @@ const ProductPage = () => {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-lg-3 col-md-4 col-sm-6 col-12">
-                        <ProductCard />
-                    </div>
+
+                    {products && products.map((item, index) => {
+                        return <div key={index} className="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
+                            <ProductCard data={item} />
+                        </div>
+                    })}
+
                 </div>
             </div>
         </>

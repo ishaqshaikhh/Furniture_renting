@@ -29,3 +29,201 @@
   box-sizing: border-box;
   font-family: "Manrope", sans-serif;
 }
+
+.padd-x {
+  padding-left: 5vw !important;
+  padding-right: 5vw !important;
+}
+
+@media (max-width: 499px) {
+  .padd-x {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+}
+
+
+/* button css code hehrehrehreh  */
+
+
+.button {
+  position: relative;
+  display: inline-flex;
+  padding: 1.5vw 5vw;
+  font-size: 1.2vw;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--text-color);
+  background: transparent;
+  border: 1px solid var(--text-color);
+  border-radius: 0.25rem;
+  user-select: none;
+  border-radius: 50px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.75s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+
+.text-wrapper {
+  z-index: 100;
+  position: relative;
+  color: transparent;
+}
+
+.text-wrapper::before,
+.text-wrapper::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: #000;
+  white-space: nowrap;
+  transform: translate3d(-50%, -50%, 0);
+  transition: all 0.65s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.text-wrapper::after {
+  color: var(--text-color);
+  transform: translate3d(-50%, 140%, 0);
+}
+
+.fill {
+  z-index: 10;
+  position: absolute;
+  top: -50%;
+  left: -25%;
+  width: 150%;
+  height: 250%;
+  display: block;
+  border-radius: 50%;
+  background: var(--bg-color);
+  pointer-events: none;
+  transform: translate3d(0, 80%, 0);
+  transition: all 0.55s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.button:hover .text-wrapper::before {
+  transform: translate3d(-50%, -300%, 0);
+}
+
+.button:hover .text-wrapper::after {
+  color: var(--text-color);
+  transform: translate3d(-50%, -50%, 0);
+}
+
+.button:hover .fill {
+  transform: translateY(-30%);
+}
+
+@media (max-width: 999px) {
+  .button {
+    font-size: 1rem;
+    padding: 1.2rem 4rem;
+  }
+}
+
+@media (max-width: 399px) {
+  .button {
+    font-size: .8rem;
+    padding: 1.3rem 4rem;
+  }
+}
+
+
+
+/* heading code herehrhe rh */
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  margin-top: 50px !important;
+  margin: 30px 0;
+}
+
+.heading h2 {
+  font-family: nohem-regular;
+  text-align: end;
+  font-size: 3vw;
+  margin-bottom: 0px;
+}
+
+
+@media (max-width: 999px) {
+
+  .heading h2 {
+    text-align: end;
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .heading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .heading h2 {
+    text-align: center;
+    font-size: 2.5rem;
+  }
+}
+
+
+/* quantitty button css here  */
+
+
+
+.qty-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #ccc;
+}
+
+.qty-container .input-qty {
+  text-align: center;
+  padding: 3px 6px;
+  max-width: 1.5rem;
+  font-size: .85rem;
+  border: none;
+}
+
+.qty-container .input-qty:focus {
+  outline: none;
+}
+
+.qty-container .qty-btn-minus,
+.qty-container .qty-btn-plus {
+  border: none;
+  padding: 5px;
+  font-size: 10px;
+  height: 1.5rem;
+  width: 2rem;
+  background-color: #fff;
+  transition: 0.3s;
+}
+
+.qty-container .qty-btn-plus {
+  margin-left: -1px;
+}
+
+.qty-container .qty-btn-minus {
+  margin-right: -1px;
+}
+
+.qty-container button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.qty-container button:focus{
+  outline: none;
+  box-shadow: none;
+}
+
+.qty-container button i{
+  font-size: .75rem !important;
+}

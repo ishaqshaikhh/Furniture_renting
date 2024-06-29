@@ -33,8 +33,6 @@ class Product(models.Model):
 
 class Cart(models.Model):
     user = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
-    start_date = models.DateField(null=True,blank=True)
-    end_date = models.DateField(null=True,blank=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveBigIntegerField(default=1)
 
@@ -43,15 +41,17 @@ class Cart(models.Model):
     
 
 ORDER_STATUS = (
-    ('Pending','Pending'),
+    ('Processing','Processing'),
     ('Accepted','Accepted'),
-    ('Dispatch','Dispatch'),
+    ('Packed','Packed'),
+    ('Dispatched','Dispatched'),
+    ('Out for Delivery','Out for Delivery'),
     ('Deliverd','Deliverd'),
 )
 
 PAYMENT_STATUS = (
     ('Pending','Pending'),
-    ('Succeeded','Succeeded'),
+    ('Success','Success'),
     ('Failed','Failed'),
 )
 
@@ -62,23 +62,25 @@ PAYMENT_METHOD = (
 
 class Order(models.Model):
     user  = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    oreder_no = models.PositiveIntegerField()
+    order_number = models.CharField(max_length=50, blank=True, null=True)
     customer_name = models.CharField(max_length=50)
     adddress  = models.CharField(max_length=500)
     city = models.CharField(max_length=100)
     state = models.CharField(max_length=50)
     pincode = models.CharField(max_length=15)
-    email = models.EmailField()
-    phone = models.CharField(max_length=15)
+    email = models.EmailField(null=True,blank=True)
+    phone = models.CharField(max_length=15,null=True,blank=True)
     products = models.ManyToManyField(Product,through='OrderItem')
     sub_total = models.DecimalField(max_digits=10,decimal_places=2)
+    start_date = models.DateField(null=True,blank=True)
+    end_date = models.DateField(null=True,blank=True)
     gst = models.DecimalField(max_digits=10,decimal_places=2)
     shipping_charges = models.DecimalField(max_digits=10,decimal_places=2)
     total_amount = models.DecimalField(max_digits=10,decimal_places=2)
-    order_status = models.CharField(choices=ORDER_STATUS, max_length=20)
-    payment_status = models.CharField(choices=PAYMENT_STATUS , max_length=20)
-    payment_method = models.CharField(choices=PAYMENT_METHOD,max_length=20)
-    transcation_id = models.CharField(max_length=100)
+    order_status = models.CharField(choices=ORDER_STATUS, max_length=20,default="Processing")
+    payment_status = models.CharField(choices=PAYMENT_STATUS , max_length=20,default="Pending")
+    payment_method = models.CharField(choices=PAYMENT_METHOD,max_length=20,default="COD")
+    transcation_id = models.CharField(max_length=100,null=True, blank=True)
     invoice = models.FileField(upload_to='invoices')
 
     def __str__(self):

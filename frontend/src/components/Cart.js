@@ -35,7 +35,7 @@ const Cart = (props) => {
                 </div>
                 <div className="">
                     <p></p>
-                    <a href="" className={styles.checkOut_btn}>Checkout - &#8377;138.00</a>
+                    <a href="" className="button2">Checkout - &#8377;138.00</a>
                 </div>
             </div>
         </>

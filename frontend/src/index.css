@@ -16,14 +16,14 @@
   src: url('../public/Font/Roselyne.ttf');
 }
 
-:root{
+:root {
   --text-color: #000;
   --bg-color: #fff;
   --accent1-color: #C26601;
   --accent2-color: #3F2522;
 }
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -132,6 +132,34 @@
 
 
 
+.button2 {
+  width: 100% !important;
+  color: var(--text-color);
+  border: 1px solid var(--accent1-color);
+  text-align: center;
+  font-weight: 600;
+  padding: 8px;
+  font-size: 1.1vw;
+  display: block;
+  letter-spacing: 1px;
+  border-radius: 30px;
+  text-decoration: none;
+  transition: all .5s ease;
+}
+
+.button2:hover {
+  background-color: var(--accent1-color);
+  color: var(--bg-color);
+}
+
+@media (max-width: 1199px) {
+  .button2 {
+    font-size: 1rem;
+  }
+}
+
+
+
 /* heading code herehrhe rh */
 
 .heading {
@@ -164,6 +192,7 @@
     justify-content: center;
     align-items: center;
   }
+
   .heading h2 {
     text-align: center;
     font-size: 2.5rem;
@@ -213,17 +242,17 @@
   margin-right: -1px;
 }
 
-.qty-container button{
+.qty-container button {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.qty-container button:focus{
+.qty-container button:focus {
   outline: none;
   box-shadow: none;
 }
 
-.qty-container button i{
+.qty-container button i {
   font-size: .75rem !important;
 }

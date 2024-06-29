@@ -49,10 +49,7 @@ def getAllProducts(request):
 def getProduct(reqeust):
     try:
         prod_id = reqeust.GET.get("product_id")
-        try:
-            product = Product.objects.get(id=prod_id)
-        except Product.DoesNotExist:
-            return JsonResponse({"error":"Product not found"})
+        product = Product.objects.get(id=prod_id)
         return JsonResponse({"success": True, "product": serializers.serialize(format="json",queryset=product)})
     except Exception as e:
         return JsonResponse({"error":f"Something went wrong {str(e)}"})

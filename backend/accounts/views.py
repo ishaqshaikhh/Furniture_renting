@@ -93,3 +93,12 @@ def Login(request):
     else:
         data = {"error": "Method not Allowed","message":"Method not Allowed"}
         return JsonResponse(data)
+
+@api_view(["GET"])
+def get_user(request):
+    try:
+        get_data = CustomUser.objects.get()
+    except Exception as e:
+        print("Error",e)
+    
+    return JsonResponse(get_data)

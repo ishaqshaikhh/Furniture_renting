@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render , get_object_or_404
 from django.http import JsonResponse
 from .models import *
 from rest_framework.decorators import api_view
@@ -113,4 +113,25 @@ def addToCart(request):
     except Exception as e:
         return JsonResponse({"error": f"Something went wrong {str(e)}"})
 
+@api_view("POST")
+def order(request):
 
+    try:
+        token = request.POST.get("token")
+        if not token:
+            return JsonResponse({"error": "Invalid token"})
+        result = verify_token(token)
+        if "error" in result and result["error"]:
+            return JsonResponse({"error": result["error"]})
+        
+        itmes = Cart.objects.all()
+
+
+    except Exception as e:
+        return JsonResponse({"error":"Invalid token"})
+    
+def addToWishlist(request,product_id):
+    product  = get_object_or_404(Product,pk=product_id)
+    wishlist , created = Wishlist.objects.get_or_create(user=request.user,product=product)
+
+    return JsonResponse({'product':product})

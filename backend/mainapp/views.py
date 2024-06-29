@@ -4,6 +4,7 @@ from .models import *
 from rest_framework.decorators import api_view
 import json
 from mainapp.models import *
+from rest_framework import status
 from django.db.models import Q
 import requests
 from django.conf import settings
@@ -185,36 +186,43 @@ def order(request):
 @api_view(['POST'])
 def add_to_wishlist(request, product_id):
     user = request.user
-    product = Product.objects.get(id=product_id)
+    product = get_object_or_404(Product, id=product_id)
     
     try:
         wishlist_item = Wishlist.objects.create(user=user, product=product)
-        return JsonResponse({'message': 'Product added to wishlist successfully'})
+        return JsonResponse({'message': 'Product added to wishlist successfully'}, status=status.HTTP_201_CREATED)
     except Exception as e:
-        return JsonResponse({'error': str(e)})
-
+        return JsonResponse({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 def view_wishlist(request):
-    user = request.user  # Assuming user is authenticated
+    user = request.user
     
     wishlist_items = Wishlist.objects.filter(user=user)
-    serializer = WishlistSerializer(wishlist_items, many=True)
     
-    return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+    wishlist_data = []
+    for item in wishlist_items:
+        product_data = {
+            'id': item.product.id,
+            'name': item.product.name,
+            'description': item.product.description,  # Add other fields as needed
+            # Add more fields if necessary
+        }
+        wishlist_data.append(product_data)
+    
+    return JsonResponse(wishlist_data, status=status.HTTP_200_OK, safe=False)
 
 @api_view(['DELETE'])
 def remove_from_wishlist(request, product_id):
-    user = request.user  # Assuming user is authenticated
-    
+    user = request.user
     try:
         wishlist_item = Wishlist.objects.get(user=user, product_id=product_id)
+        wishlist_item.delete()
+        return JsonResponse({'success': 'Item removed from wishlist'}, status=status.HTTP_204_NO_CONTENT)
     except Wishlist.DoesNotExist:
-        return JsonResponse({"error": "Item not found in wishlist"}, status=status.HTTP_404_NOT_FOUND)
-    
-    wishlist_item.delete()
-    return JsonResponse({"success": "Item removed from wishlist"}, status=status.HTTP_204_NO_CONTENT)
-
+        return JsonResponse({'error': 'Item not found in wishlist'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["GET"])
 def getAllCarts(request):

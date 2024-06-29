@@ -1,47 +1,46 @@
 .footer{
     /* margin-top: 50px; */
-     background-color: var(--accent2-color);
+     background-color: #F2EDE7;
      height: auto;
      width: 100%;
      padding: 50px 0px;
-     margin-top: 50px;
  }
  
  .content1 p{
      font-size: 1vw;
      margin: 25px 0px;
      font-weight: 500;
-     color: var(--bg-color);
+     color: var(--text-color);
  }
  .content2 h3{
-     color: var(--bg-color);
+     color: var(--text-color);
      font-weight: 700;
  }
  .content2 ul{
     padding-left: 0px;
  }
  .content2 li{
-     color: var(--bg-color);
+     color: var(--text-color);
      font-size: 1.2vw;
      cursor: pointer;
      /* padding: 8px; */
  }
  .content2 i{
-     color: var(--bg-color);
+     color: var(--text-color);
      padding: 15px 15px 14px 0px;
      font-size: 1.2vw;
  }
  .content4 h3{
-     color: var(--bg-color);
+     color: var(--text-color);
      font-weight: 700;
  }
  .content4 .icon{
      display: flex;
      align-items: center;
-     color: var(--bg-color);
+     color: var(--text-color);
  }
  hr{
-     background-color: var(--bg-color);
+     background-color: var(--text-color);
      height: 3px;
  }
  .content4 .icon i{
@@ -75,7 +74,7 @@
      font-size: 1.2vw;
      background-color: var(--accent2-color);
      border-radius: 50%;
-     color: var(--bg-color);
+     color: var(--text-color);
      margin-right: 10px;
      transition: background .5s ease;
      text-decoration: none;

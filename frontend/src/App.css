@@ -239,3 +239,65 @@
   text-decoration: none;
   color: var(--text-color);
 }
+
+
+/* parallax code erehreh eh */
+
+
+.paralax{
+  height: 400px;
+  width: 100%;
+  background: url('../public/images/bg-2.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items:center;
+  position: relative;
+}
+
+.paralax::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--text-color);
+  opacity: 0.4;
+}
+
+
+.paralax .content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  padding: 0 8vw !important;
+  color: var(--bg-color);
+  gap: 10px;
+  z-index: 1;
+}
+
+.paralax .content h2{
+  font-size: 5vw;
+  font-family: nohem-regular;
+  color: var(--bg-color);
+}
+
+.paralax .content p{
+  font-size: 1.5vw;
+  font-family: nohem-regular;
+}
+
+@media (max-width: 999px) {
+  .paralax .content h2{
+    font-size: 4rem;
+  }
+  .paralax .content p{
+    font-size: 1.2rem;
+  }
+}

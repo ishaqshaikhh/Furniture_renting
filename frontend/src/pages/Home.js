@@ -2,10 +2,10 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
 import Products from '../components/Products'
+import toast, { Toaster } from 'react-hot-toast';
+
 
 const Home = () => {
-
-
 
 
 
@@ -62,6 +62,13 @@ const Home = () => {
             <span class="text-wrapper" data-text="View All"></span>
             <div class="fill"></div>
           </Link>
+        </div>
+      </div>
+
+      <div className="paralax">
+        <div className="container content">
+          <h2>Browse modern today!</h2>
+          <p>Dive into our curated collection of contemporary furniture and decor, meticulously designed to elevate your living spaces.</p>
         </div>
       </div>
     </>

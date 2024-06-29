@@ -1,5 +1,8 @@
 import React from 'react'
 import styles from '../styles/productdetails.module.css'
+import { Link } from 'react-router-dom'
+import { LiaShippingFastSolid } from "react-icons/lia";
+import { PiPackageLight } from "react-icons/pi";
 
 function Productdetails() {
   return (
@@ -7,12 +10,12 @@ function Productdetails() {
       <div className={`containerfluid ${styles.details}`}>
         <div className="container">
             <div className="row">
-                <div className="col-lg-6">
+                <div className="col-lg-5 col-md-6">
                     <div className={styles.prodimg}>
                         <img src="../images/furniture2.png"  alt="" className="imgfluid" />
                     </div>
                 </div>
-                <div className="col-lg-6">
+                <div className="col-lg-7 col-md-6">
                     <div className={styles.content}>
                         <h3 className={styles.prodtitle}>Velvet Accent Chair</h3>
 
@@ -32,6 +35,42 @@ function Productdetails() {
                             </p>
                         </div>
 
+                        <div className={styles.add}>
+                            <span className={styles.quantity}>
+                                <input type="number" />
+                            </span>
+                            <Link className='button'>
+                                <span class="text-wrapper" data-text="Add to Cart"></span>
+                                <div class="fill"></div>
+                            </Link>
+                        </div>
+                        
+                        <div className={styles.border}></div>
+                        <div className="row">
+                            <div className="col-lg-6">
+                                <div className={styles.status}>
+                                    <div className={styles.icon}>
+                                        <PiPackageLight />
+                                    </div>
+                                    <div className={styles.para}>
+                                        <h5>Free Shipping</h5>
+                                        <p>You will love at great low prices</p>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            <div className="col-lg-6">
+                                <div className={styles.status}>
+                                    <div className={styles.icon}>
+                                        <LiaShippingFastSolid />
+                                    </div>
+                                    <div className={styles.para}>
+                                        <h5>Fast Delivery</h5>
+                                        <p>Experience the joy of fast shipping</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

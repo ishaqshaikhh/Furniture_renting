@@ -19,6 +19,8 @@ const Navbar = () => {
     const navigate = useNavigate();
     const token = localStorage.getItem("token")
     const [searchOpen, setSearchOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
     
 
     const menuRef = useRef();
@@ -56,6 +58,15 @@ const Navbar = () => {
         getAllProducts()
     }, [])
 
+    const handleSearchInputChange = (event) => {
+        setSearchQuery(event.target.value);
+        // Perform search/filtering logic
+        const filteredResults = products.filter(product =>
+            product.name.toLowerCase().includes(event.target.value.toLowerCase())
+        );
+        setSearchResults(filteredResults);
+    };
+
     return (
         <>
             <nav className={styles.navbar}>
@@ -73,14 +84,18 @@ const Navbar = () => {
                 </div>
                 <div className={styles.icons}>
                     <div ref={searchRef} className={`${styles.search} ${searchOpen ? styles.active : null}`}>
-                        <input type="text" placeholder='Search ...' />
+                        <input type="text" placeholder='Search ...' value={searchQuery} onChange={handleSearchInputChange}/>
                         <FiSearch style={{ cursor: "pointer" }} onClick={() => {setSearchOpen(!searchOpen)}} />
-                        <div className={styles.search_cont}>
-                            <div className={styles.search_card}>
-                                <img src="/images/furniture2.png" className='img-fluid' alt="" />
-                                <h4>Price</h4>
+                        {searchOpen && (
+                            <div className={styles.search_cont}>   
+                            {searchResults.map(products => ( 
+                                <div className={styles.search_card}>
+                                    <img src="/images/furniture2.png" className='img-fluid' alt="" />
+                                    <h4>Price</h4>
+                                </div>
+                            ))}
                             </div>
-                        </div>
+                        )}
                     </div>
                     <FiHeart style={{ cursor: "pointer" }} />
                     <BiUser style={{ cursor: "pointer" }} onClick={() => { sendProfile() }} />

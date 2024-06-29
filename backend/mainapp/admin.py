@@ -19,7 +19,7 @@ class ShowOrder(admin.ModelAdmin):
 
 @admin.register(OrderItem)
 class ShowOrderItem(admin.ModelAdmin):
-    list_display = ['user']
+    list_display = []
 
 @admin.register(Wishlist)
 class ShowWishlist(admin.ModelAdmin):

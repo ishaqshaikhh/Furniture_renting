@@ -68,7 +68,6 @@ def addToCart(request):
         if not token:
             return JsonResponse({"error": "Invalid token"})
         result = verify_jwt_token(token)
-        print("Result",result)
         if "error" in result and result["error"]:
             return JsonResponse({"error": result["error"]})
         
@@ -98,7 +97,7 @@ def addToCart(request):
             totalamount = round(amount)
             data = {
                 'success':True,
-                "cart_items": json.dumps(carts),
+                "cart_items": serializers.serialize(format="json",queryset=carts),
                 "totalamount": totalamount,
                 "product_obj": {
                     "product":{
@@ -116,7 +115,7 @@ def addToCart(request):
     except Exception as e:
         return JsonResponse({"error": f"Something went wrong {str(e)}"})
 
-@api_view("POST")
+@api_view(["POST"])
 def order(request):
     try:
         token = request.POST.get("token")

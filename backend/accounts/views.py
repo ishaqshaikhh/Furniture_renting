@@ -24,11 +24,11 @@ def verify_token(token):
         body = {"token":token}
         result = requests.get(url, headers=headers, data=body)
         if result.status_code == 200:
-            return JsonResponse({"success":True})
+            return {"success":True}
         else:
-            return JsonResponse({"error":"Token is not valid"})
+            return {"error":"Token is not valid"}
     except Exception as e:
-        return JsonResponse({"error":f"Something went wrong {str(e)}"})
+        return {"error":f"Something went wrong {str(e)}"}
 
 # POST - Registers the user with required parameters : Login not required
 @api_view(["POST"])
@@ -39,7 +39,6 @@ def signup(request):
             email = data.get('email', '')
             full_name = data.get('full_name', '')
             password = data.get('password', '')
-            print("Hello",email,full_name,password)
             if (email == None or email == '') or (full_name == None or full_name == '') or (password == None or password == ''):
                 data = {"error":"none fields","message":"Please enter details"}
                 return JsonResponse(data)
@@ -79,9 +78,12 @@ def login(request):
     if request.method == "POST":
         # Getting user data
         data = json.loads(request.body)
-        email = data.get('email')
-        password = data.get('password')
+        email = data.get('email','')
+        password = data.get('password','')
         try:
+            if (email == None or email == '') or (password == None or password == ''):
+                data = {"error":"none fields","message":"Please enter details"}
+                return JsonResponse(data)
             # Searching user with phone number
             user = authenticate(email=email, password=password)
             # Checking password

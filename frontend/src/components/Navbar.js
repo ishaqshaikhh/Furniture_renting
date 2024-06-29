@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import styles from '../styles/navbar.module.css'
 import { Link, useNavigate } from 'react-router-dom'
 import { FiSearch, FiHeart } from "react-icons/fi";
@@ -6,10 +6,14 @@ import { BiShoppingBag, BiUser, BiX } from "react-icons/bi";
 import { RiMenu2Line } from "react-icons/ri";
 
 import Cart from './Cart';
+import FetchContext from '../context/Fetch/FetchContext';
+import StateContext from '../context/state/StateContext';
 
 
 const Navbar = () => {
 
+    const { products } = useContext(StateContext)
+    const { getAllProducts } = useContext(FetchContext); 
     const [cartOpen, setCartOpen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
@@ -47,6 +51,10 @@ const Navbar = () => {
             navigate('/profile')
         }
     }
+
+    useEffect(() => {
+        getAllProducts()
+    }, [])
 
     return (
         <>

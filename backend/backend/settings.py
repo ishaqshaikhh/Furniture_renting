@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'mainapp',
     'accounts',
     'rest_framework',
+    "rest_framework_simplejwt",
     'corsheaders',
 ]
 
@@ -131,4 +132,6 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
-# test
+CORS_ALLOWED_ORIGINS = ["*"]
+STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"

@@ -1,10 +1,27 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { BiX, BiMinus, BiPlus } from "react-icons/bi";
 import styles from '../styles/cart.module.css'
+import StateContext from '../../src/context/state/StateContext';
+
 
 const Cart = (props) => {
+    const { authenticated, setAuthenticated, setModal, checkUserIsAuthenticated } = useContext(StateContext);
+    const checkUser = async () => {
+        if(await checkUserIsAuthenticated() === true) {
+            setAuthenticated(true)
+        } else {
+            setAuthenticated(false)
+        }
+    }
+    
+    useEffect(() => {
+      checkUser()
+    }, [])
+    
+    
     return (
         <>
+        {authenticated ? (
             <div className={`${styles.cart} ${props.open ? styles.acitve : null}`} ref={props.cart}>
                 <div>
                     <div className={`${styles.cart_top} d-flex justify-content-between align-items-center`}>
@@ -38,6 +55,19 @@ const Cart = (props) => {
                     <a href="" className="button2">Checkout - &#8377;138.00</a>
                 </div>
             </div>
+        ): <>
+            <div className={`${styles.cart} ${props.open ? styles.acitve : null}`} ref={props.cart}>
+                <div>
+                    <div className={`${styles.cart_top} d-flex justify-content-between align-items-center`}>
+                        <h4>cart</h4>
+                        <BiX className={styles.cartClose} onClick={() => {props.close(false)}} />
+                    </div>
+                    <div className={`${styles.cartList} mt-2`}>
+                      <p>Please Login to continue</p>  
+                    </div>
+                </div>
+            </div>
+        </>}
         </>
     )
 }

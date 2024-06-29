@@ -1,8 +1,39 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from '../styles/checkout.module.css'
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 function Checkout() {
 
+  
+  const initialOptions = {
+    "client-id": "AbWAkTMOzXmtwNpgDnMjNLo-Ids8cGOpDEVzkFzSn-BvCwbtQF95b4vC8WoqBPnwlevWlAFg1mVSs2FV",
+    "enable-funding": "paylater,venmo",
+    "data-sdk-integration-source": "integrationbuilder_sc",
+  };
+  const createOrder = async () => {
+      const response = await fetch("/api/paypal/create-order/", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+      });
+      const data = await response.json();
+      return data.id;
+  };
+
+  const onApprove = async (data) => {
+      const response = await fetch(`/api/paypal/capture-order/${data.orderID}/`, {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+      });
+      const result = await response.json();
+      console.log("Capture result", result);
+  };
+
+
+  const [message, setMessage] = useState("");
 
   return (
     <>
@@ -140,6 +171,12 @@ function Checkout() {
 
 
               </div>
+              <PayPalScriptProvider options={{ "client-id": "AbWAkTMOzXmtwNpgDnMjNLo-Ids8cGOpDEVzkFzSn-BvCwbtQF95b4vC8WoqBPnwlevWlAFg1mVSs2FV" }}>
+              <PayPalButtons 
+                  createOrder={createOrder}
+                  onApprove={onApprove}
+              />
+              </PayPalScriptProvider>
               <div className="">
                 <p></p>
                 <a href="" className="button2">Checkout</a>

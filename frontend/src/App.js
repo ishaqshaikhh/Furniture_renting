@@ -5,7 +5,7 @@ import Home from './pages/Home';
 import Register from './components/Register';
 import Login from './components/Login';
 import Productdetails from './pages/Productdetails';
-
+import Checkout from './pages/Checkout';
 function App() {
   return (
     <>
@@ -17,6 +17,8 @@ function App() {
             <Route exact path='/Register' element={<Register />}></Route>
             <Route exact path='/Login' element={<Login />}></Route>
             <Route exact path='/Productdetails' element={<Productdetails />}></Route>
+            <Route exact path='/Checkout' element={<Checkout />}></Route>
+
           </Routes>
         </main>
       </Router>

@@ -41,7 +41,7 @@ def getAllProducts(request):
     context["price_range"] = price_range
     context["category"] = category
     context["sort"] = sort
-    context["products"] = products
+    context["products"] = serializers.serialize(format="json",queryset=products)
     response = {"success": True, "context": context}
     return JsonResponse(response)
 
@@ -328,7 +328,7 @@ def remove_cart(request):
                 c.delete()
                 amount = 0.0
                 cart_product = [p for p in Cart.objects.all() if p.user == user]
-                cart_items = len(cart_product)
+                cart_items = Cart.objects.filter(user=user)
                 for p in cart_product:
                     temp_amount = (float(p.quantity) * float(p.product.discounted_price))
                     amount += temp_amount
@@ -336,7 +336,7 @@ def remove_cart(request):
                 data = {
                     'amount' : amount,
                     'totalamount': total_amount,
-                    'cart_items':cart_items,
+                    'cart_items':serializers.serialize(format="json", queryset=cart_items),
                     'success':'success'
                 }
                 return JsonResponse(data)

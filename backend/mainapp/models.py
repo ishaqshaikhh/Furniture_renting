@@ -18,11 +18,19 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self) :
+        return str(self.id)
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=500)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.id)
+    
+
 
 class Cart(models.Model):
     user = models.ForeignKey("Customeuser",on_delete=models.CASCADE)
@@ -30,6 +38,10 @@ class Cart(models.Model):
     end_date = models.DateField()
     product = models.ForeignKey("Product", on_delete=models.CASCADE)
     quantity = models.PositiveBigIntegerField(default=1)
+
+    def __str__(self):
+        return str(self.id)
+    
 
 ORDER_STATUS = (
     ('Pending','Pending'),
@@ -70,11 +82,23 @@ class Order(models.Model):
     transcation_id = models.CharField(max_length=100)
     invoice = models.FieldFile(upload_to='invoices')
 
+    def __str__(self):
+        return str(self.id)
+    
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order,on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity  = models.PositiveBigIntegerField(default=1)
 
+    def __str__(self):
+        return str(self.id)
+    
+
 class Wishlist(models.Model):
     user = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
     product  = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.id)
+    

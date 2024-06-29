@@ -51,7 +51,7 @@ def signup(request):
 @api_view(["POST"])
 def Login(request):
     if request.method == "POST":
-        # Getting data
+        # Getting user data
         data = json.loads(request.body)
         email = data.get('email')
         password = data.get('password')
@@ -102,3 +102,27 @@ def get_user(request):
         print("Error",e)
     
     return JsonResponse(get_data)
+
+@api_view(["GET"])
+def profile(request):
+    get_profile = Address.objects.get()
+    context  = {
+        'get_profile': get_profile
+    }
+    return JsonResponse(context)
+
+def wihslist(request):
+    # We have to make this
+    pass
+
+def cart(request):
+    # We have to make this
+    pass
+
+def products(request):
+    # We have to make this
+    pass
+
+def orders(request):
+    #we have to make this
+    pass

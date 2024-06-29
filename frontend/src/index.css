@@ -6,6 +6,12 @@
 }
 
 @font-face {
+  font-family: nohem-regular;
+  src: url('../public/Font/Nohemi-Regular-BF6438cc579d934.woff');
+}
+
+
+@font-face {
   font-family: roselyn;
   src: url('../public/Font/Roselyne.ttf');
 }

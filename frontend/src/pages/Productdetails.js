@@ -78,7 +78,7 @@ function Productdetails() {
                                         <button className="qty-btn-minus btn-light" type="button">
                                             <BiMinus /></button>
                                         <input type="text" name="qty" value="0" className="input-qty" />
-                                        <button className="qty-btn-plus btn-light" type="button">
+                                        <button  className="qty-btn-plus btn-light" type="button">
                                             <BiPlus /></button>
                                     </div>
                                     <Link className='button'>

@@ -93,7 +93,7 @@
      }
  }
  
- @media (max-width: 849px) {
+ @media (max-width: 999px) {
      .top_content{
          justify-content: start;
          align-items: start;

@@ -57,6 +57,9 @@
 
 .search {
     transition: all .5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .search.active {
@@ -91,10 +94,16 @@
     border-radius: 10px;
     height: 0px;
     overflow: hidden;
+    text-decoration: none;
+}
+
+a{
+    text-decoration: none !important;
 }
 
 .search.active .search_cont{
     height: fit-content;
+    text-decoration: none;
 }
 
 .search .search_cont .search_card {
@@ -112,6 +121,7 @@
 .search .search_cont .search_card h4 {
     font-size: 1.2vw;
     margin-bottom: 0px;
+    color: var(--text-color);
 }
 
 @media (max-width: 1199px) {

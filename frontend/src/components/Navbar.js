@@ -13,7 +13,7 @@ import StateContext from '../context/state/StateContext';
 const Navbar = () => {
 
     const { products } = useContext(StateContext)
-    const { getAllProducts } = useContext(FetchContext); 
+    const { getAllProducts } = useContext(FetchContext);
     const [cartOpen, setCartOpen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
@@ -21,7 +21,7 @@ const Navbar = () => {
     const [searchOpen, setSearchOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
-    
+
 
     const menuRef = useRef();
     const cartRef = useRef();
@@ -59,13 +59,16 @@ const Navbar = () => {
     }, [])
 
     const handleSearchInputChange = (event) => {
-        setSearchQuery(event.target.value);
+        const query = event.target.value;
+        setSearchQuery(query);
         // Perform search/filtering logic
         const filteredResults = products.filter(product =>
-            product.name.toLowerCase().includes(event.target.value.toLowerCase())
+            product.fields.name.toLowerCase().includes(query.toLowerCase())
         );
         setSearchResults(filteredResults);
     };
+
+    console.log(searchResults);
 
     return (
         <>
@@ -84,16 +87,16 @@ const Navbar = () => {
                 </div>
                 <div className={styles.icons}>
                     <div ref={searchRef} className={`${styles.search} ${searchOpen ? styles.active : null}`}>
-                        <input type="text" placeholder='Search ...' value={searchQuery} onChange={handleSearchInputChange}/>
-                        <FiSearch style={{ cursor: "pointer" }} onClick={() => {setSearchOpen(!searchOpen)}} />
+                        <input type="text" placeholder='Search ...' value={searchQuery} onChange={handleSearchInputChange} />
+                        <FiSearch style={{ cursor: "pointer" }} onClick={() => { setSearchOpen(!searchOpen) }} />
                         {searchOpen && (
-                            <div className={styles.search_cont}>   
-                            {searchResults.map(products => ( 
-                                <div className={styles.search_card}>
-                                    <img src="/images/furniture2.png" className='img-fluid' alt="" />
-                                    <h4>Price</h4>
-                                </div>
-                            ))}
+                            <div className={styles.search_cont}>
+                                {searchQuery && searchResults.map(products => (
+                                    <Link onClick={() => {setSearchOpen(!searchOpen)}} to={`/productDetails/${products.pk}`} className={styles.search_card}>
+                                        <img src={process.env.REACT_APP_API_URL + `media/${products.fields.image1}`} className='img-fluid' alt="" />
+                                        <h4>{products.fields.name}</h4>
+                                    </Link>
+                                ))}
                             </div>
                         )}
                     </div>

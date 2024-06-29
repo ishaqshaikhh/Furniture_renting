@@ -13,11 +13,13 @@ const Navbar = () => {
     const [cartOpen, setCartOpen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const navigate = useNavigate();
-
-
+    const token = localStorage.getItem("token")
+    const [searchOpen, setSearchOpen] = useState(false);
+    
 
     const menuRef = useRef();
     const cartRef = useRef();
+    const searchRef = useRef();
 
     const handleModelCLickedOutside = (event) => {
         if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -25,6 +27,9 @@ const Navbar = () => {
         }
         if (cartRef.current && !cartRef.current.contains(event.target)) {
             setCartOpen(false);
+        }
+        if (searchRef.current && !searchRef.current.contains(event.target)) {
+            setSearchOpen(false);
         }
     };
 
@@ -35,6 +40,13 @@ const Navbar = () => {
         };
     }, []);
 
+    const sendProfile = () => {
+        if (!token) {
+            navigate('/login')
+        } else {
+            navigate('/profile')
+        }
+    }
 
     return (
         <>
@@ -52,9 +64,12 @@ const Navbar = () => {
                     </Link>
                 </div>
                 <div className={styles.icons}>
-                    <FiSearch style={{ cursor: "pointer" }} />
+                    <div ref={searchRef} className={`${styles.search} ${searchOpen ? styles.active : null}`}>
+                        <input type="text" placeholder='Search ...' />
+                        <FiSearch style={{ cursor: "pointer" }} onClick={() => {setSearchOpen(!searchOpen)}} />
+                    </div>
                     <FiHeart style={{ cursor: "pointer" }} />
-                    <BiUser style={{ cursor: "pointer" }} onClick={() => { navigate('/login') }} />
+                    <BiUser style={{ cursor: "pointer" }} onClick={() => { sendProfile() }} />
                     <BiShoppingBag style={{ cursor: "pointer" }} onClick={() => { setCartOpen(true) }} />
                 </div>
                 <Cart open={cartOpen} close={setCartOpen} cart={cartRef} />

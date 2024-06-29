@@ -10,7 +10,7 @@ from django.conf import settings
 from accounts.views import BASE_URL
 import jwt
 from django.core import serializers
-
+from datetime import datetime
 
 
 # Create your views here.
@@ -41,9 +41,11 @@ def getAllProducts(request):
     context["price_range"] = price_range
     context["category"] = category
     context["sort"] = sort
-    context["products"] = products
+    context["products"] = serializers.serialize(format="json",queryset=products)
     response = {"success": True, "context": context}
     return JsonResponse(response)
+
+
 
 def verify_token(token):
     try:
@@ -126,30 +128,45 @@ def order(request):
         if "error" in result and result["error"]:
             return JsonResponse({"error": result["error"]})
         
-        decoded_token = jwt.decode(token,settings.JWT_SECRET_KEY,algorithms="HS256")
-        user_id = decoded_token["user_id"]
+        if "success" in result and result["success"] == True:        
+            decoded_token = jwt.decode(token,settings.JWT_SECRET_KEY,algorithms="HS256")
+            user_id = decoded_token["user_id"]
+            user = CustomUser.objects.get(user_id=user_id)
+            carts = Cart.objects.filter(user=user)
+            if len(carts) == 0:
+                return JsonResponse({"error":"Cart is empty"})
+            data = json.loads(request.body)
+            order = Order()
+            order.customer_name = data.get("customer_name")
+            order.email = data.get("email")
+            order.phone = data.get("phone")
+            order.adddress = data.get("address")
+            order.city = data.get("city")
+            order.state = data.get("state")
+            order.pincode = data.get("pincode")
+            amount = 0.0
+            for cart in carts:
+                order.products.add(cart.product, through_defaults={"quantity":cart.quantity})
+                amount += round(float((cart.product.discounted_price) * int(cart.quantity)))
 
-        user = CustomUser.objects.get(user_id=user_id)
-        carts = Cart.objects.fliter(user=user)
-
-        if not carts.exists():
-            return JsonResponse({"error":"Cart is empty"})
-        
-        total_amount = 0.0
-        for cart_item in carts:
-            total_amount += cart_item.quantity * cart_item.product.discounted_price
-
-        
-        for cart_item in carts:
-            order_item = OrderItem.objects.create(
-                order = order,
-                product = cart_item.product,
-                quantity = cart_item.quantity
-            )
-
-            carts.delete()
-        return JsonResponse({"success": True,"message": "Order Placed Successfully"})
-
+            order.sub_total = amount
+            gst = round(float(amount) * 0.18)
+            order.gst = gst
+            order.total_amount = round(float(amount) + float(gst))
+            start_date = data.get("start_date")
+            date_compos = str(start_date).split("-")
+            start_date = datetime(int(date_compos[0]),int(date_compos[1]),int(date_compos[2])).strftime("%Y-%m-%d")
+            order.start_date = start_date
+            end_date = data.get("end_date")
+            date_compos = str(end_date).split("-")
+            end_date = datetime(int(date_compos[0]),int(date_compos[1]),int(date_compos[2])).strftime("%Y-%m-%d")
+            order.end_date = end_date
+            order.shipping_charges = 0
+            order.save()
+            order.order_number = "FRTL" + str(datetime.now().date()) + str(datetime.now().month) + str(datetime.now().day) + str(order.id)
+            return JsonResponse({"success":"Order placed successfully","order":serializers.serialize(format="json",queryset=order)})
+        else:
+            return JsonResponse({"error": "Authentication Failed"})
     except Exception as e:
         return JsonResponse({"error":f"something went wrong : {str(e)}"})
 
@@ -159,6 +176,7 @@ def addToWishlist(request,product_id):
     wishlist , created = Wishlist.objects.get_or_create(user=request.user,product=product)
 
     return JsonResponse({'product':product})
+
 @api_view(["GET"])
 def getAllCarts(request):
     try:
@@ -184,10 +202,10 @@ def getAllCarts(request):
             cart_items = {}
             for c in carts:
                 temp_amount = float(c.product.discounted_price) * int(c.quantity)
-                cart_items[c]["sub_total"] = temp_amount
+                cart_items[c] = c
                 amount += temp_amount
             total_amount = "%.2f" % float(amount)
-            data = {"success": True, "cart_length":cart_count, "carts":cart_items, "total_amount":total_amount}
+            data = {"success": True, "cart_length":cart_count, "carts":serializers.serialize(format="json",queryset=cart_items), "total_amount":total_amount}
             return JsonResponse(data)
         else:
             return JsonResponse({"error":"Token is invalid"})
@@ -195,89 +213,139 @@ def getAllCarts(request):
     except Exception as e:
         return JsonResponse({"error":f"Something went wrong {str(e)}"})
 
+@api_view(["GET"])
 def plus_cart(request):
-    if request.method == "GET" and request.user.is_authenticated:
-        prod_id = request.GET['prod_id']
-        c = Cart.objects.get(Q(product=prod_id) & Q(user=request.user))
-        c.quantity += 1
-        c.save()
-        amount = 0.0
-        temp_amount = 0.0
-        cart_product = [p for p in Cart.objects.all() if p.user == request.user]
-        for p in cart_product:
-            temp_amount = ("%.2f" % (float(p.quantity) * float(p.product.discounted_price)))
-
-            amount += float(temp_amount)
-
-        totalamount = round(amount)
-        amount = round(float(float(c.product.discounted_price) * int(c.quantity)))
-        data = {
-                'quantity':c.quantity,
-                'price':c.product.discounted_price,
-                'amount': amount,
-                'totalamount' : totalamount,
-                'success':'success'
-        }
-        return JsonResponse(data, safe=False)
-    else:
-        data = {
-            'error':'auth_error'
-        }
-        return JsonResponse(data, safe=False)
-
-
-def minus_cart(request):
-    if request.method == "GET" and request.user.is_authenticated:
-        prod_id = request.GET['prod_id']
-        c = Cart.objects.get(Q(product=prod_id) & Q(user=request.user))
-        if (c.quantity > 1):
-            c.quantity -= 1
-        c.save()
-        amount = 0.0
-        temp_amount = 0.0
-        cart_product = [p for p in Cart.objects.all() if p.user == request.user]
-        for p in cart_product:
-            temp_amount = (float(p.quantity) * float(p.product.discounted_price))
-            amount += float(temp_amount)
-        totalamount = round(amount)
-        amount = round(float(float(c.product.discounted_price) * int(c.quantity)))
-        data = {
-                'quantity':c.quantity,
-                'amount': amount,
-                'price':c.product.discounted_price,
-                'totalamount' : totalamount,
-                'success': 'success'
-        }
-        return JsonResponse(data, safe=False)
-    else:
-        data = {
-            'error':'auth_error'
-        }
-        return JsonResponse(data, safe=False)
-
-
-def remove_cart(request):
-    if request.method == "GET" and request.user.is_authenticated:
-        user = request.user
-        prod_id = request.GET['prod_id']
-        c = Cart.objects.get(Q(product=prod_id) & Q(user=user))
-        c.delete()
-        amount = 0.0
-        cart_product = [p for p in Cart.objects.all() if p.user == user]
-        cart_items = len(cart_product)
-        for p in cart_product:
-            temp_amount = (float(p.quantity) * float(p.product.discounted_price))
-            amount += temp_amount
-        total_amount = round(amount)
-        data = {
-            'amount' : amount,
-            'totalamount': total_amount,
-            'cart_items':cart_items,
-            'success':'success'
-        }
-        return JsonResponse(data)
-    else:
-        data = {
-                    'error':'auth_error'
+    try:
+        if request.method == "GET":
+            token = request.GET.get("token")
+            if not token:
+                return JsonResponse({"error": "Invalid token"})
+            result = verify_token(token)
+            if "error" in result and result["error"]:
+                return JsonResponse({"error": result["error"]})
+            
+            if "success" in result and result["success"] == True:
+                decoded_token = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=["HS256"])
+                user_id = decoded_token["user_id"]
+                try:
+                    user = CustomUser.objects.get(id=user_id)
+                except:
+                    user = None
+                    return JsonResponse({"error":"User does not exist"})
+                prod_id = request.GET['prod_id']
+                c = Cart.objects.get(Q(product=prod_id) & Q(user=user))
+                c.quantity += 1
+                c.save()
+                amount = 0.0
+                temp_amount = 0.0
+                cart_product = [p for p in Cart.objects.all() if p.user == user]
+                for p in cart_product:
+                    temp_amount = ("%.2f" % (float(p.quantity) * float(p.product.discounted_price)))
+                    amount += float(temp_amount)
+                totalamount = round(amount)
+                amount = round(float(float(c.product.discounted_price) * int(c.quantity)))
+                data = {
+                        'quantity':c.quantity,
+                        'price':c.product.discounted_price,
+                        'amount': amount,
+                        'totalamount' : totalamount,
+                        'success':True
                 }
-        return JsonResponse(data, safe=False)
+                return JsonResponse(data, safe=False)
+            else:
+                data = {'error':'Authentication Failed'}
+                return JsonResponse(data)
+    except Exception as e:
+        return JsonResponse({"error":f"Something went wrong {str(e)}"})
+
+@api_view(["GET"])
+def minus_cart(request):
+    try:
+        if request.method == "GET":
+            token = request.GET.get("token")
+            if not token:
+                return JsonResponse({"error": "Invalid token"})
+            result = verify_token(token)
+            if "error" in result and result["error"]:
+                return JsonResponse({"error": result["error"]})
+            
+            if "success" in result and result["success"] == True:
+                decoded_token = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=["HS256"])
+                user_id = decoded_token["user_id"]
+                try:
+                    user = CustomUser.objects.get(id=user_id)
+                except:
+                    user = None
+                    return JsonResponse({"error":"User does not exist"})
+                prod_id = request.GET['prod_id']
+                c = Cart.objects.get(Q(product=prod_id) & Q(user=user))
+                if (c.quantity > 1):
+                    c.quantity -= 1
+                c.save()
+                amount = 0.0
+                temp_amount = 0.0
+                cart_product = [p for p in Cart.objects.all() if p.user == user]
+                for p in cart_product:
+                    temp_amount = (float(p.quantity) * float(p.product.discounted_price))
+                    amount += float(temp_amount)
+                totalamount = round(amount)
+                amount = round(float(float(c.product.discounted_price) * int(c.quantity)))
+                data = {
+                        'quantity':c.quantity,
+                        'amount': amount,
+                        'price':c.product.discounted_price,
+                        'totalamount' : totalamount,
+                        'success': True
+                }
+                return JsonResponse(data, safe=False)
+            else:
+                data = {'error':'Authentication Failed'}
+                return JsonResponse(data, safe=False)    
+    except Exception as e:
+        return JsonResponse({"error":f"Something went wrong {str(e)}"})
+
+@api_view(["GET"])
+def remove_cart(request):
+    try:
+        if request.method == "GET":
+            token = request.GET.get("token")
+            if not token:
+                return JsonResponse({"error": "Invalid token"})
+            result = verify_token(token)
+            if "error" in result and result["error"]:
+                return JsonResponse({"error": result["error"]})
+            
+            if "success" in result and result["success"] == True:
+                decoded_token = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=["HS256"])
+                user_id = decoded_token["user_id"]
+                try:
+                    user = CustomUser.objects.get(id=user_id)
+                except:
+                    user = None
+                    return JsonResponse({"error":"User does not exist"})
+                prod_id = request.GET['prod_id']
+                c = Cart.objects.get(Q(product=prod_id) & Q(user=user))
+                c.delete()
+                amount = 0.0
+                cart_product = [p for p in Cart.objects.all() if p.user == user]
+                cart_items = Cart.objects.filter(user=user)
+                for p in cart_product:
+                    temp_amount = (float(p.quantity) * float(p.product.discounted_price))
+                    amount += temp_amount
+                total_amount = round(amount)
+                data = {
+                    'amount' : amount,
+                    'totalamount': total_amount,
+                    'cart_items':serializers.serialize(format="json", queryset=cart_items),
+                    'success':'success'
+                }
+                return JsonResponse(data)
+            else:
+                data = {'error':'Authentication Failed'}
+            return JsonResponse(data, safe=False)
+    except Exception as e:
+        return JsonResponse({"error":f"Something went wrong"})
+    
+
+
+

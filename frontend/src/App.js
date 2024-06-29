@@ -8,6 +8,7 @@ import Productdetails from './pages/Productdetails';
 import Checkout from './pages/Checkout';
 import ProductPage from './pages/ProductPage';
 import { Toaster } from 'react-hot-toast';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -23,9 +24,9 @@ function App() {
             <Route exact path='/Register' element={<Register />}></Route>
             <Route exact path='/Login' element={<Login />}></Route>
             <Route exact path='/products' element={<ProductPage />}></Route>
-            <Route exact path='/Productdetails' element={<Productdetails />}></Route>
-            <Route exact path='/Checkout' element={<Checkout />}></Route>
-
+            <Route exact path='/productdetails' element={<Productdetails />}></Route>
+            <Route exact path='/checkout' element={<Checkout />}></Route>
+            <Route exact path='/profile' element={<Profile />}></Route>
           </Routes>
         </main>
       </Router>

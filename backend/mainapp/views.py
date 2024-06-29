@@ -115,7 +115,6 @@ def addToCart(request):
 
 @api_view("POST")
 def order(request):
-
     try:
         token = request.POST.get("token")
         if not token:

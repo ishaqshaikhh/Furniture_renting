@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate
 import requests
 import jwt
 from django.conf import settings
+from mainapp.views import verify_token
 
 
 BASE_URL = "http://127.0.0.1:8000/"
@@ -107,11 +108,11 @@ def get_user(request):
         token = request.GET.get('token')
         if not token:
             return JsonResponse({"error": "token not found"})
-        url = BASE_URL + "api/token/verify/"
-        headers = {"Authorization": f"Bearer {token}"}
-        body = {"token":token}
-        result = requests.get(url, headers=headers, data=body)
-        if result.status_code == 200:
+        result = verify_token(token)
+        if "error" in result and result["error"]:
+            return JsonResponse({"error": result["error"]})
+
+        if "success" in result and result["success"] == True:
             decoded_token = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=["HS256"])
             user_id = decoded_token["user_id"]
             try:

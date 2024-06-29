@@ -14,9 +14,9 @@ def signup(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         email = data.get('email', '')
-        username = data.get('username', '')
+        full_name = data.get('full_name', '')
         password = data.get('password', '')
-        if email == None or username == None or password == None:
+        if email == None or full_name == None or password == None:
             data = {"error":"none fields","message":"Please enter details"}
             return JsonResponse(data)
         data = {"success": "success"}
@@ -28,7 +28,7 @@ def signup(request):
             pass
             # Creating a new user
             user = CustomUser(email=email)
-            user.username = username
+            user.full_name = full_name
             user.set_password(password)
             user.save()
             

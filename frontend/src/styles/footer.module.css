@@ -1,0 +1,131 @@
+.footer{
+    /* margin-top: 50px; */
+     background-color: var(--accent2-color);
+     height: auto;
+     width: 100%;
+     padding: 50px 0px;
+     margin-top: 50px;
+ }
+ 
+ .content1 p{
+     font-size: 1vw;
+     margin: 25px 0px;
+     font-weight: 500;
+     color: var(--bg-color);
+ }
+ .content2 h3{
+     color: var(--bg-color);
+     font-weight: 700;
+ }
+ .content2 ul{
+    padding-left: 0px;
+ }
+ .content2 li{
+     color: var(--bg-color);
+     font-size: 1.2vw;
+     cursor: pointer;
+     /* padding: 8px; */
+ }
+ .content2 i{
+     color: var(--bg-color);
+     padding: 15px 15px 14px 0px;
+     font-size: 1.2vw;
+ }
+ .content4 h3{
+     color: var(--bg-color);
+     font-weight: 700;
+ }
+ .content4 .icon{
+     display: flex;
+     align-items: center;
+     color: var(--bg-color);
+ }
+ hr{
+     background-color: var(--bg-color);
+     height: 3px;
+ }
+ .content4 .icon i{
+     font-size: 1.2vw;
+     padding: 10px;
+ }
+ .content4 .icon span{
+     font-size: 1.2vw;
+     font-weight: 600;
+ }
+ 
+ .footer_top{
+     padding-top: 1.5vw !important;
+     padding-bottom: 1.5vw !important;
+     background-color: #EBF6F4;
+ }
+ 
+ 
+ .top_content{
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+ }
+ 
+ .social{
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     width: 4vw;
+     height: 4vw;
+     font-size: 1.2vw;
+     background-color: var(--accent2-color);
+     border-radius: 50%;
+     color: var(--bg-color);
+     margin-right: 10px;
+     transition: background .5s ease;
+     text-decoration: none;
+
+ }
+ 
+ .social:hover{
+     background-color: var(--accent1-color);
+ }
+ 
+ @media (max-width: 999px) {
+     .social{
+         width: 55px;
+         height: 55px;
+         font-size: 1.2rem;
+     }
+ }
+ 
+ @media (max-width: 849px) {
+     .top_content{
+         justify-content: start;
+         align-items: start;
+         gap: 20px;
+         flex-direction: column;
+     }
+     .content1 p{
+         font-size: 1.2rem;
+     }
+     .content2 li{
+         font-size: 1.2rem;
+     }
+     .content2 i{
+         /* padding: 15px; */
+         font-size: 1.2rem;
+     }
+     .content4 .icon i{
+         font-size: 1.2rem;
+         padding: 10px;
+     }
+     .content4 .icon span{
+         font-size: 1.2rem;
+         font-weight: 600;
+     }
+     
+ }
+ 
+ @media (max-width: 499px) {
+     .social{
+         width: 45px;
+         height: 45px;
+         font-size: 1rem;
+     }
+ }

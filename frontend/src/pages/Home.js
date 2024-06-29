@@ -13,10 +13,7 @@ const Home = () => {
   const { getAllProducts } = useContext(FetchContext)
 
   useEffect(() => {
-    const token = localStorage.getItem("token")
-    if (token) {
-      getAllProducts();
-    }
+    getAllProducts();
   }, [])
 
   return (

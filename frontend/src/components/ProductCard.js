@@ -6,7 +6,7 @@ import { RiArrowRightUpLine } from "react-icons/ri";
 const ProductCard = ({data}) => {
     return (
         <>
-            <Link className={styles.product}>
+            <Link to={`/productDetails/${data.pk}`} className={styles.product}>
                 <img src={process.env.REACT_APP_API_URL + `media/${data.fields.image1}`} className='img-fluid' alt="" />
                 <div className="d-flex align-items-center justify-content-between w-100">
                     <div>

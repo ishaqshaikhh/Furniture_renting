@@ -22,10 +22,7 @@ const ProductPage = () => {
 
 
     useEffect(() => {
-        const token = localStorage.getItem("token")
-        if (token) {
-            getAllProducts();
-        }
+        getAllProducts();
     }, [])
 
     return (

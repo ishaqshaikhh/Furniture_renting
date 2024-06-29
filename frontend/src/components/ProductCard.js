@@ -3,16 +3,15 @@ import styles from '../styles/productCard.module.css'
 import { Link } from 'react-router-dom'
 import { RiArrowRightUpLine } from "react-icons/ri";
 
-
-const ProductCard = () => {
+const ProductCard = ({data}) => {
     return (
         <>
             <Link className={styles.product}>
-                <img src="/images/furniture2.png" className='img-fluid' alt="" />
+                <img src={`/media/${data.fields.image1}`} className='img-fluid' alt="" />
                 <div className="d-flex align-items-center justify-content-between w-100">
                     <div>
-                        <h4>Mad Comfort Chairs</h4>
-                        <span className={styles.price}>&#8377; 300</span>
+                        <h4>{data.fields.name}</h4>
+                        <span className={styles.price}>&#8377; {data.fields.price}</span>
                     </div>
                     <div className={styles.icon}>
                         <RiArrowRightUpLine />

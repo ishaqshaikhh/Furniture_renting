@@ -11,7 +11,7 @@
 }
 
 .content{
-    padding: 50px;
+    padding: 20px;
     
 }
 .prodtitle{
@@ -44,4 +44,63 @@
     margin-top: 15px;
     font-size: 1.2vw;
     line-height: 1.5rem;
+}
+.add{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+.add .quantity{
+    width: 12%;
+}
+.add .quantity input{
+    width: 80%;
+}
+.border{
+    margin-top: 15%;
+    border: 1px solid var(--accent2-color);
+}
+.status{
+    display: flex;
+    padding: 20px 0px;
+    margin-top: 30px;
+}
+.status .icon{
+    font-size: 2.5vw;
+}
+.status .para{
+    padding-left: 20px;
+}
+.status .para h5{
+    margin-bottom: 0px;
+}
+
+@media(max-width:998px){
+    .prodtitle{
+        font-size: 2rem;
+    }
+    .price{
+        font-size: 1.5rem;
+    }
+    .price .original{
+        font-size: 1.4rem;
+    }
+    .stock p{
+        font-size: 0.8rem;
+        margin-bottom: 0px;
+    }
+    .desc{
+        font-size: 1.1rem;
+        line-height: 1.5rem;
+    }
+    .status{
+        padding: 0px 0px;
+    }
+    .status .icon{
+        font-size: 2rem;
+    }
+}
+
+@media(max-width:549px){
+
 }

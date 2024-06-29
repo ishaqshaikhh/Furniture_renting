@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
-import json
+import json 
 from rest_framework_simplejwt.tokens import RefreshToken
 from .models import CustomUser, Address
 from django.contrib.auth import authenticate

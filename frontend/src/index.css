@@ -1,10 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
 
 @font-face {
-  font-family: nohem-regular;
-  src: url('../public/Font/Nohemi-Regular-BF6438cc579d934.woff');
+  font-family: nohem-light;
+  src: url('../public/Font/Nohemi-Light-BF6438cc5899919.ttf');
 }
 
+@font-face {
+  font-family: roselyn;
+  src: url('../public/Font/Roselyne.ttf');
+}
 
 :root{
   --text-color: #000;

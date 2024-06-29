@@ -46,8 +46,12 @@
     font-size: 1.4vw;
 }
 
-.menu_icon{
+.menu_icon {
     font-size: 1.3vw;
+    display: none;
+}
+
+.close{
     display: none;
 }
 
@@ -66,13 +70,113 @@
 }
 
 @media (max-width: 999px) {
-    .menu_links{
+
+    .menu_icon {
+        display: block;
+        font-size: 1.2rem;
+    }
+
+    .navbar .menu_links {
+        background-color: var(--bg-color);
+        width: 350px;
+        position: fixed;
+        top: 0;
+        left: -100%;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: start;
+        flex-direction: column;
+        height: 100vh;
+        z-index: 9999;
+        padding: 100px 0 40px;
+        box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.2);
+        transition: all .5s ease;
+        gap: 0px;
+    }
+
+    .navbar ul.active {
+        left: 0;
+    }
+
+    .close {
         display: block;
         position: absolute;
-        left: -100%;
+        top: 20px;
+        right: 20px;
+        font-size: 2.3rem !important;
+        cursor: pointer;
+        background-color: #eee;
+        display: flex;
+        padding: 7px;
+        border-radius: 50%;
+        justify-content: center;
+        align-items: center;
+        transition: all .5s ease;
     }
-    .menu_icon{
+
+    .close:hover {
+        background-color: var(--accent1-color);
+        color: var(--bg-color);
+
+    }
+
+    .navbar ul li {
         display: block;
-        font-size: 1.1rem;
+        padding: 10px 40px;
+        width: 100%;
+    }
+
+    .navbar ul li a {
+        display: block;
+        width: 100% !important;
+    }
+
+    .navbar ul li.active {
+        color: var(--text-color);
+        background-color: var(--accent1-color);
+    }
+
+    .navbar ul li.active a {
+        color: var(--text-color) !important;
+        background: none;
+    }
+
+    .navbar ul li:hover a {
+        color: var(--text-color) !important;
+        background: none;
+    }
+
+    .navbar ul li:hover {
+        color: var(--text-color);
+        background-color: var(--accent1-color);
+    }
+
+    .navbar ul li a::after {
+        display: none;
+    }
+
+    .contact {
+        display: block;
+    }
+
+    .navbar .btn {
+        display: none;
+    }
+
+    .menu {
+        display: block;
+    }
+
+}
+
+@media (max-width: 499px) {
+    .navbar {
+        padding: 0px 20px;
+    }
+
+    .navbar .logo {
+        position: static;
+        margin-left: 20px;
     }
 }

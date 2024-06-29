@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from .models import *
 from rest_framework.decorators import api_view
 import json
 
@@ -9,7 +10,7 @@ def handle_404():
 
 @api_view(["GET"])
 def getAllProducts(request):
-    products = Products.objects.all()
+    products = Product.objects.all()
     category = request.GET.get('category')
     price_range = request.GET.get('price_range')
     sort = request.GET.get('sort')

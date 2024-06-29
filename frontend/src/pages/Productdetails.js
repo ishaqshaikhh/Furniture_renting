@@ -12,11 +12,12 @@ function Productdetails() {
 
     console.log(id);
     const [data, setData] = useState('');
-    
+    const [quantity, setQuantity] = useState(0);
+
 
     const getProduct = async () => {
         try {
-            
+
             const response = await fetch(process.env.REACT_APP_API_URL + `api/getProduct/?product_id=${id}`, {
                 method: "GET",
                 headers: {
@@ -25,9 +26,11 @@ function Productdetails() {
             })
 
             const json = await response.json();
+            const productData = JSON.parse(json.product)
             if (json.success) {
                 console.log(json);
-                setData()
+                console.log(productData);
+                setData(productData[0].fields)
             } else {
                 toast.error(json.error)
                 console.log(json.error);
@@ -49,26 +52,24 @@ function Productdetails() {
                     <div className="row">
                         <div className="col-lg-5 col-md-6">
                             <div className={styles.prodimg}>
-                                <img src="../images/furniture2.png" alt="" className="imgfluid" />
+                                <img src={process.env.REACT_APP_API_URL + `media/${data.image1}`} alt="" className="imgfluid" />
                             </div>
                         </div>
                         <div className="col-lg-7 col-md-6">
                             <div className={styles.content}>
-                                <h3 className={styles.prodtitle}>Velvet Accent Chair</h3>
+                                <h3 className={styles.prodtitle}>{data.name}</h3>
 
                                 <div className={styles.price}>
-                                    <p className={styles.original}>₹450</p>
-                                    <p className={styles.discount}>₹350</p>
+                                    <p className={`${styles.discount} me-3`}>₹{data.discounted_price}</p>
+                                    <p className={styles.original}>₹{data.price}</p>
                                 </div>
 
                                 <div className={styles.stock}>
-                                    <p>SKU: <span>0001</span> </p>
-                                    <p>Category: <span>Category Name</span> </p>
+                                    <p>SKU: <span>{data.sku_no}</span> </p>
                                 </div>
 
                                 <div className={styles.desc}>
-                                    <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Commodi rerum sunt totam quae atque laboriosam aliquid ex, recusandae velit praesentium.
-                                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eos, enim? Lorem ipsum dolor sit, amet consectetur adipisicing elit. Porro, dolores.
+                                    <p>{data.description}
                                     </p>
                                 </div>
 
@@ -77,7 +78,7 @@ function Productdetails() {
                                         <button className="qty-btn-minus btn-light" type="button">
                                             <BiMinus /></button>
                                         <input type="text" name="qty" value="0" className="input-qty" />
-                                        <button className="qty-btn-plus btn-light" type="button">
+                                        <button  className="qty-btn-plus btn-light" type="button">
                                             <BiPlus /></button>
                                     </div>
                                     <Link className='button'>

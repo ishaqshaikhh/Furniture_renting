@@ -1,3 +1,48 @@
 .page{
     margin-top: 120px;
 }
+
+
+
+/* pagination code harehreh jerjen */
+
+.pagination{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1vw;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.pagination .btn{
+    border: none;
+    outline: none;
+    background-color: var(--bg-color);
+    border-radius: 8px;
+    padding: 5px 14px;
+    display: flex;
+    font-weight: 500;
+    font-size: 1.1em;
+    color: #333;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagination .btn.active{
+    background-color: var(--accent1-color);
+    color: var(--bg-color);
+}
+
+.pagination .btn.disabled{
+    opacity: .7;
+}
+
+.pagination .dots{
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 1.5em;
+    color: gray;
+    font-weight: bold;
+}

@@ -13,7 +13,7 @@ const Footer = () => {
             <div className="col-lg-3 col-md-6 mt-3">
               <div className={styles.content1}>
                 <div className="logo">
-                  <img src="./images/fav-logo.png" alt="" className='img-fluid' />
+                  <img src="./images/logo.png" alt="" className='img-fluid' />
                 </div>
                 <p> This convenient and eco-friendly option promotes sustainability by encouraging the reuse of quality furniture.</p>
 

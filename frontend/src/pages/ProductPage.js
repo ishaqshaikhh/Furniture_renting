@@ -25,6 +25,37 @@ const ProductPage = () => {
         getAllProducts();
     }, [])
 
+
+    // pagination code herere 
+    const [currentPage, setCurrentPage] = useState(1);
+    const usersPerPage = 8;
+
+    // Calculate the current users to display
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    const currentProduct = products.slice(indexOfFirstUser, indexOfLastUser);
+
+    // Calculate total pages
+    const totalPages = Math.ceil(products.length / usersPerPage);
+
+    // Change page
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const previousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    // Next page handler
+    const nextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+
+
     return (
         <>
             <div className={`${styles.page} container-fluid padd-x`}>
@@ -90,12 +121,29 @@ const ProductPage = () => {
                 </div>
                 <div className="row">
 
-                    {products && products.map((item, index) => {
+                    {products && currentProduct.slice(0, 8).map((item, index) => {
                         return <div key={index} className="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
                             <ProductCard data={item} />
                         </div>
                     })}
+                </div>
 
+                <div className="d-flex justify-content-end align-items-end">
+                    {products.length >= "8" ? <div className="d-flex justify-content-between align-items-center">
+                        <div className={styles.pagination}>
+                            <button onClick={previousPage} disabled={currentPage === 1} className={`${styles.btn} ${currentPage === 1 ? styles.disabled : ''}`}>Previous</button>
+                            {[...Array(totalPages)].map((_, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => paginate(index + 1)}
+                                    className={`${styles.btn} ${currentPage === index + 1 ? styles.active : ''}`}
+                                >
+                                    {index + 1}
+                                </button>
+                            ))}
+                            <button onClick={nextPage} disabled={currentPage === totalPages} className={`${styles.btn} ${currentPage === totalPages ? styles.disabled : ''}`}>Next</button>
+                        </div>
+                    </div> : null}
                 </div>
             </div>
         </>

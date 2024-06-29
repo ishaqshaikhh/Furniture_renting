@@ -1,0 +1,37 @@
+.checkout{
+    padding-top: 8%;
+}
+.checkout h3{
+    font-size: 3.5vw;
+    text-align: center;
+    font-weight: 600;
+    font-family: nohem-light;
+}
+.customer{
+    width: 100%;
+    flex-direction: column;
+    border: 1px solid var(--accent2-color);
+    /* padding: 50px; */
+    margin-bottom: 25px;
+}
+.customer .head{
+    border-bottom: 1px solid var(--accent2-color);
+    padding: 8px;
+    display: flex;
+    justify-content: space-between;
+}
+.customer .head p{
+    margin-bottom: 0px;
+    
+}
+.customer .head h5{
+    font-size: 1.5vw;
+    margin-bottom: 0px;
+}
+.customer input{
+    width: 100%;
+    padding: 10px 10px;
+}
+.customer .details{
+    padding: 20px 20px;
+}

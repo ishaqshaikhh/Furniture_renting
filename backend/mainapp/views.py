@@ -45,7 +45,7 @@ def getAllProducts(request):
     response = {"success": True, "context": context}
     return JsonResponse(response)
 
-def verify_jwt_token(token):
+def verify_token(token):
     try:
         if not token:
             return JsonResponse({"error":"Token is required"})
@@ -67,7 +67,7 @@ def addToCart(request):
         token = request.GET.get("token")
         if not token:
             return JsonResponse({"error": "Invalid token"})
-        result = verify_jwt_token(token)
+        result = verify_token(token)
         if "error" in result and result["error"]:
             return JsonResponse({"error": result["error"]})
         
@@ -98,6 +98,7 @@ def addToCart(request):
             data = {
                 'success':True,
                 "cart_items": serializers.serialize(format="json",queryset=carts),
+                "cart_length":total_cart,
                 "totalamount": totalamount,
                 "product_obj": {
                     "product":{

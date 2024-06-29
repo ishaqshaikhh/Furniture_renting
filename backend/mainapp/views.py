@@ -124,12 +124,34 @@ def order(request):
         if "error" in result and result["error"]:
             return JsonResponse({"error": result["error"]})
         
-        itmes = Cart.objects.all()
+        decoded_token = jwt.decode(token,settings.JWT_SECRET_KEY,algorithms="HS256")
+        user_id = decoded_token["user_id"]
 
+        user = CustomUser.objects.get(user_id=user_id)
+        carts = Cart.objects.fliter(user=user)
+
+        if not carts.exists():
+            return JsonResponse({"error":"Cart is empty"})
+        
+        total_amount = 0.0
+        for cart_item in carts:
+            total_amount += cart_item.quantity * cart_item.product.discounted_price
+
+        
+        for cart_item in carts:
+            order_item = OrderItem.objects.create(
+                order = order,
+                product = cart_item.product,
+                quantity = cart_item.quantity
+            )
+
+            carts.delete()
+        return JsonResponse({"success": True,"message": "Order Placed Successfully"})
 
     except Exception as e:
-        return JsonResponse({"error":"Invalid token"})
-    
+        return JsonResponse({"error":f"something went wrong : {str(e)}"})
+
+api_view(['GET'])   
 def addToWishlist(request,product_id):
     product  = get_object_or_404(Product,pk=product_id)
     wishlist , created = Wishlist.objects.get_or_create(user=request.user,product=product)

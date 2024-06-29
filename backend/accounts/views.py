@@ -20,7 +20,7 @@ def signup(request):
             data = {"error":"none fields","message":"Please enter details"}
             return JsonResponse(data)
         data = {"success": "success"}
-        # Check if user with phone number or email already exists
+        # Check the User's  phone number or email already exists
         try:
             CustomUser.objects.get(email=email)
             return JsonResponse({'error': 'user already exists', 'message': 'User with this email already exists'}, status=400)
@@ -33,7 +33,7 @@ def signup(request):
             user.save()
             
             user = authenticate(email=email, password=password)
-            # Cheking password
+            # Checking password
             if user:
                 # Logging in user with password
                 refresh = RefreshToken.for_user(user)
@@ -58,7 +58,7 @@ def Login(request):
         try:
             # Searching user with phone number
             user = authenticate(email=email, password=password)
-            # Cheking password
+            # Checking password
             if user:
                 try:
                     ip_address = request.META.get('HTTP_X_FORWARDED_FOR')

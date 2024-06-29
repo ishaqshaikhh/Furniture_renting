@@ -67,6 +67,12 @@ const Navbar = () => {
                     <div ref={searchRef} className={`${styles.search} ${searchOpen ? styles.active : null}`}>
                         <input type="text" placeholder='Search ...' />
                         <FiSearch style={{ cursor: "pointer" }} onClick={() => {setSearchOpen(!searchOpen)}} />
+                        <div className={styles.search_cont}>
+                            <div className={styles.search_card}>
+                                <img src="/images/furniture2.png" className='img-fluid' alt="" />
+                                <h4>Price</h4>
+                            </div>
+                        </div>
                     </div>
                     <FiHeart style={{ cursor: "pointer" }} />
                     <BiUser style={{ cursor: "pointer" }} onClick={() => { sendProfile() }} />

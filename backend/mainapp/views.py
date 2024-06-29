@@ -46,11 +46,15 @@ def getAllProducts(request):
     return JsonResponse(response)
 
 @api_view(["GET"])
-def getProduct(reqeust):
+def getProduct(request):
     try:
-        prod_id = reqeust.GET.get("product_id")
+        prod_id = request.GET.get("product_id")
+        print("prod",prod_id)
         product = Product.objects.get(id=prod_id)
-        return JsonResponse({"success": True, "product": serializers.serialize(format="json",queryset=product)})
+        print("1",product)
+        obj = serializers.serialize(format="json",queryset=product)
+        print("2")
+        return JsonResponse({"success": True, "product": obj })
     except Exception as e:
         return JsonResponse({"error":f"Something went wrong {str(e)}"})
 

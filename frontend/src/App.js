@@ -13,6 +13,7 @@ import Address from './pages/Address';
 import YourBookings from './pages/YourBookings';
 import Account from './pages/Account';
 import Footer from './components/Footer';
+import Contact from './pages/Contact';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route exact path='/Register' element={<Register />}></Route>
             <Route exact path='/Login' element={<Login />}></Route>
             <Route exact path='/products' element={<ProductPage />}></Route>
+            <Route exact path='/Contact' element={<Contact />}></Route>
             <Route exact path='/productdetails/:id' element={<Productdetails />}></Route>
             <Route exact path='/checkout' element={<Checkout />}></Route>
             <Route exact path='/account' element={<Account />}>
